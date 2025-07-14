@@ -1,0 +1,266 @@
+@import url('https://fonts.googleapis.com/css2?family=Jost:ital,wght@0,100..900;1,100..900&display=swap');
+@import url('https://db.onlinewebfonts.com/c/f9ced2222639ca75db5574cba95a22eb?family=Might+Makes+Right+BB');
+
+@font-face {
+    font-family: 'Street Drips';
+    src: url('/assets/StreetdripsRegular-lxe1D.woff') format('woff');
+} 
+@font-face {
+    font-family: 'Gill Sans';
+    src: url('/assets/GFFont/GillSansStd.woff') format('woff');
+    font-style: normal;
+    font-weight: 400;
+}
+@font-face {
+    font-family: 'Gill Sans';
+    src: url('/assets/GFFont/GillSansStdBold.woff') format('woff');
+    font-style: normal;
+    font-weight: 700;
+
+}
+@font-face {
+    font-family: 'Gill Sans';
+    src: url('/assets/GFFont/GillSansStdBoldCondensed.woff') format('woff');
+    font-style: italic;
+}
+:root {
+    --purple-bg: rgba(119, 36, 201, 0.4);
+    --orange-bg: rgba(255, 132, 0, 0.4);
+    --blue-bg: rgba(8, 124, 225, 0.4);
+    --red-bg: rgba(255, 0, 0, 0.4);
+    --green-bg: rgba(47, 255, 0, 0.4);
+    --card-radius: 12px;
+    --background-image: url('/assets/BG.png');
+}
+  
+body {
+    background: #1B1B1B;
+    font-family: 'Segoe UI', Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+}
+  
+.spandan-events-section {
+    height: 100vh;
+    padding: 2rem 1rem;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+  
+.spandan-banner {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+  
+.spandan-banner > h1 {
+    display: inline-block;
+    color: white;
+    font-size: 6rem;
+    font-family: 'Street Drips Extrude';
+    padding-top: 0.75rem;
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.spandan-banner h1 h1 {
+    
+    position: absolute;
+    font-family: 'Street Drips', sans-serif;
+    color: #0095ff;
+    font-size: 6rem;
+
+}
+  
+.spandan-banner p {
+    font-size: 1.15rem;
+    margin-bottom: 1.5rem;
+    color: #cfd8dc;
+}
+  
+.event-filters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    justify-content: center;
+}
+  
+.event-filters .filter {
+    background: #232a3b;
+    color: #fff;
+    border: none;
+    border-radius: 50px;
+    padding: 0.5rem 1.25rem;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+  
+.event-filters .filter.active,
+.event-filters .filter:hover {
+    background: #1da1f2;
+    color: #fff;
+}
+  
+.event-cards-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 4rem;
+    justify-items: center;
+
+}
+  
+.event-card {
+    border-radius: var(--card-radius);
+    box-shadow: 0 4px 24px 0 rgba(30, 60, 90, 0.18);
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    width: 320px;
+    height: 460px;
+    position: relative;
+    color: #fff;
+    outline: 9px solid #FFE165;
+    justify-content: space-between;
+
+    margin: 1rem;
+}
+  
+.event-photo {
+    width: auto;
+    height: 220px;
+    border: 4px solid rgba(189, 190, 192, 0.80);
+}
+.purple { 
+
+    border: var(--purple-bg) solid #4E4E4E;
+    background: linear-gradient(var(--purple-bg), var(--purple-bg)), var(--background-image);
+}
+.blue { 
+    border: var(--blue-bg) solid #4E4E4E;
+    background: linear-gradient(var(--blue-bg), var(--blue-bg)), var(--background-image);
+}
+
+.orange {
+    border: var(--orange-bg) solid #4E4E4E;
+    background: linear-gradient(var(--orange-bg), var(--orange-bg)), var(--background-image);
+
+}
+
+.red {
+    border: var(--red-bg) solid #4E4E4E;
+    background: linear-gradient(var(--red-bg), var(--red-bg)), var(--background-image);
+}
+
+.green {
+    border: var(--green-bg) solid #4E4E4E;
+    background: linear-gradient(var(--green-bg), var(--green-bg)), var(--background-image);
+}
+#top {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+}
+.category-badge {
+    font-family: 'Gill Sans', sans-serif;
+    color: black;
+    font-style: italic;
+    font-size: 1.2rem;
+    font-weight: 700;
+}
+  
+.event-card h2 {
+    font-family: 'Gill Sans', sans-serif;
+    font-size: 1.6rem;
+    font-style: normal;
+    color: black;
+    font-weight: 700;
+    text-align: center;
+}
+  
+.subtitle {
+    font-family: 'Gill Sans',  sans-serif;
+    font-size: 1.1rem;
+    color: black;
+    font-weight: 400;
+    margin: 0;
+}
+
+.event-details {
+    list-style: disc inside;
+    margin: 0.8rem 0;
+    padding-left: 0.1rem;
+    color: #fff;
+    font-size: 1.01rem;
+    opacity: 0.98;
+}
+.event-details li {
+    margin-bottom: 0.3em;
+    font-weight: 500;
+}
+  
+.registration-fee {
+    font-family: "Jost", sans-serif;
+    margin: 0;
+    color: #000;
+    font-weight: 400;
+    text-align: right;
+    font-size: 1.2rem;
+    user-select: none;
+    letter-spacing: -1.6px;
+}
+.registration-fee b {
+    font-weight: 400;
+    font-size: 2.2rem;
+    padding-bottom: 0.2rem;
+}
+  
+@media (max-width: 700px) {
+    .event-cards-container {
+      grid-template-columns: 1fr;
+      gap: 1.2rem;
+    }
+    .event-card {
+      max-width: 98vw;
+      min-width: unset;
+      padding: 1.2rem 0.7rem 1rem 0.7rem;
+    }
+    .registration-fee {
+      font-size: 1rem;
+      padding: 0.5rem 0;
+    }
+}
+  
+
+.register-button {
+  margin-bottom: 3.5rem;
+  height: 2rem;
+  width: 8rem;
+  font-family: 'Jost', sans-serif;
+  font-size: 1rem;
+  border-radius: 1rem;
+  background-color: #1f1f1f;
+  color: white;
+  border: none;
+  cursor: pointer;
+  box-shadow: 0 0 8px #1da1f2, 0 0 20px #1da1f2;
+  transition: transform 0.2s ease-in-out;
+  animation: glow 1.5s infinite alternate;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.register-button:hover {
+  transform: scale(1.05);
+}
+
+@keyframes glow {
+  from {
+    box-shadow: 0 0 5px #1da1f2, 0 0 10px #1da1f2;
+  }
+  to {
+    box-shadow: 0 0 15px #1da1f2, 0 0 20px #1da1f2, 0 0 40px #1da1f2;
+  }
+}

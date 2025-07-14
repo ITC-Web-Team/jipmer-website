@@ -1,0 +1,19 @@
+.scroll-to-top {
+  position: fixed;
+  bottom: 2rem;
+  right: 2rem;
+  background-color: #1da1f2;
+  color: white;
+  border: none;
+  border-radius: 50%;
+  padding: 0.8rem;
+  cursor: pointer;
+  box-shadow: 0 0 10px rgba(255,255,255,0.4);
+  z-index: 999;
+  transition: opacity 0.3s ease-in-out, transform 0.3s;
+}
+
+.scroll-to-top:hover {
+  background-color: #27a4f2;
+  transform: scale(1.1);
+}

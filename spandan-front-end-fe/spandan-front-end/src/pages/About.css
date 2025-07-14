@@ -1,0 +1,34 @@
+
+
+.comic img {
+    display: inline;
+}
+
+#title {
+    margin-top: 6rem;
+    margin-left: 4rem;
+    display: block;
+}
+
+.comic {
+    margin: 1rem 4rem;
+    width: 67rem;
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+.row {
+    display: flex;
+    flex-direction: row;
+
+    justify-content: space-between;
+}
+
+.third-row-2 {
+    display: flex;
+    flex-direction: column;
+
+    justify-content: space-between;
+}
+

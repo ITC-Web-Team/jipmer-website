@@ -1,0 +1,752 @@
+:root {
+    --primary: #1fa7d6;
+    --secondary: #242c3c;
+    --bg-gradient: linear-gradient(120deg, #0d2b4b 0%, #196a92 100%);
+    --card-bg: #232c3e;
+    --card-alt-bg: #2a3a4f;
+    --white: #fff;
+    --text: #eaf6fb;
+    --accent: #1fa7d6;
+  }
+  
+  body {
+
+    background: #1B1B1B;
+    font-family: 'Segoe UI', Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+  }
+  
+  .contact-section {
+    width: 100%;
+    max-width: 1200px;
+    margin: 0;
+    padding: 32px 16px;
+    background: transparent;
+  }
+  
+  .contact-header {
+    text-align: center;
+    margin-bottom: 2rem;
+  }
+  
+  .contact-header > h1 {
+    display: inline-block;
+    color: white;
+    font-size: 6rem;
+    font-family: 'Street Drips Extrude';
+    padding-top: 0.75rem;
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .contact-header h1 h1 {
+
+    
+    position: absolute;
+
+    font-family: 'Street Drips', sans-serif;
+    color: #0095ff;
+    font-size: 6rem;
+  }
+  
+  .contact-header p {
+    font-size: 1.15rem;
+    margin-bottom: 1.5rem;
+    color: #cfd8dc;
+  }
+  
+  .contact-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 24px;
+    justify-content: center;
+  }
+  
+  .contact-card {
+    background: var(--card-bg);
+    border: 2px solid var(--primary);
+    border-radius: 12px;
+    padding: 32px 24px;
+    min-width: 220px;
+    flex: 1 1 220px;
+    max-width: 280px;
+    text-align: center;
+    box-shadow: 0 6px 24px rgba(0,0,0,0.08);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .contact-card h2 {
+    color: var(--white);
+    font-size: 1.1rem;
+    margin: 18px 0 10px 0;
+    font-weight: bold;
+    letter-spacing: 1px;
+  }
+  
+  .contact-card p {
+    color: var(--text);
+    font-size: 1rem;
+    margin: 0;
+    line-height: 1.7;
+  }
+  
+  /* Icon Styles */
+  .contact-icon {
+    width: 48px;
+    height: 48px;
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2rem;
+    border-radius: 50%;
+    background: var(--primary);
+    color: var(--secondary);
+  }
+  
+  .contact-icon.phone::before {
+    content: "\\260E";
+    font-size: 2rem;
+  }
+  
+  .contact-icon.email::before {
+    content: "\\2709";
+    font-size: 2rem;
+  }
+  
+  .contact-icon.location::before {
+    content: "\\1F4CD";
+    font-size: 2rem;
+  }
+  
+  .contact-icon.hours::before {
+    content: "\\23F0";
+    font-size: 2rem;
+  }
+  
+  /* Responsive Design */
+  @media (max-width: 900px) {
+    .contact-grid {
+      gap: 18px;
+    }
+    .contact-card {
+      min-width: 180px;
+      max-width: 48%;
+      padding: 24px 10px;
+    }
+  }
+  
+  @media (max-width: 600px) {
+    .contact-header h1 {
+      font-size: 1.6rem;
+      padding: 6px 18px;
+    }
+    .contact-grid {
+      flex-direction: column;
+      gap: 16px;
+    }
+    .contact-card {
+      max-width: 100%;
+      min-width: 0;
+      padding: 18px 8px;
+    }
+  }
+
+  .leadership-section {
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto 40px auto;
+    padding: 32px 16px 0 16px;
+    background: transparent;
+  }
+  
+  .leadership-title {
+    color: #4fc3f7;
+    text-align: center;
+    font-size: 2rem;
+    font-weight: bold;
+    letter-spacing: 2px;
+    margin-bottom: 36px;
+    text-shadow: 0 2px 10px #0a1a3a44;
+  }
+  
+  .leadership-grid {
+    display: flex;
+    gap: 32px;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+  
+  .leader-card {
+    background: #18243a;
+    border: 2px solid #1fa7d6;
+    border-radius: 16px;
+    width: 320px;
+    min-width: 260px;
+    max-width: 340px;
+    min-height: 260px;
+    padding: 32px 18px 24px 18px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    box-shadow: 0 6px 24px rgba(0,0,0,0.12);
+    transition: transform 0.2s;
+  }
+  
+  .leader-card:hover {
+    transform: translateY(-6px) scale(1.03);
+    box-shadow: 0 12px 36px rgba(31,167,214,0.18);
+  }
+  
+  .leader-avatar {
+    width: 68px;
+    height: 68px;
+    border-radius: 12px;
+    background: #1fa7d6;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 18px;
+    font-size: 2.5rem;
+    color: #18243a;
+    position: relative;
+  }
+  .leader-avatar::before {
+    content: "\\1F464";
+    font-size: 2.5rem;
+    color: #18243a;
+    display: block;
+    width: 100%;
+    text-align: center;
+  }
+  
+  .leader-info {
+    width: 100%;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  
+  .leader-name {
+    color: #fff;
+    font-size: 1.25rem;
+    font-weight: bold;
+    margin-bottom: 2px;
+    letter-spacing: 1px;
+  }
+  
+  .leader-role {
+    font-size: 1rem;
+    font-weight: 600;
+    margin-bottom: 2px;
+    display: block;
+  }
+  .president {
+    color: #4fc3f7;
+  }
+  .vice-president {
+    color: #4fc3f7;
+  }
+  .general-secretary {
+    color: #4fc3f7;
+  }
+  
+  .leader-domain {
+    color: #b0c4d6;
+    font-size: 0.98rem;
+    margin-bottom: 2px;
+  }
+  
+  .leader-contact {
+    color: #cbd5e1;
+    font-size: 1rem;
+    letter-spacing: 0.5px;
+    margin-top: 6px;
+    font-family: 'Segoe UI', 'Tahoma', Geneva, Verdana, sans-serif;
+  }
+  
+  @media (max-width: 900px) {
+    .leadership-grid {
+      gap: 20px;
+    }
+    .leader-card {
+      width: 90%;
+      min-width: 220px;
+      max-width: 96%;
+      padding: 24px 10px 18px 10px;
+    }
+  }
+  
+  @media (max-width: 600px) {
+    .leadership-title {
+      font-size: 1.2rem;
+      margin-bottom: 22px;
+    }
+    .leadership-grid {
+      flex-direction: column;
+      gap: 16px;
+      align-items: center;
+    }
+    .leader-card {
+      width: 100%;
+      min-width: 0;
+      max-width: 100%;
+      padding: 16px 4px 12px 4px;
+    }
+  }
+
+  .acc-catering-section {
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto 40px auto;
+    padding: 0 16px 32px 16px;
+    background: transparent;
+  }
+  
+  .acc-cat-grid {
+    display: flex;
+    gap: 32px;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+  
+  .acc-card {
+    flex: 1 1 340px;
+    max-width: 480px;
+    min-width: 280px;
+    background: #8b2bbf;
+    border-radius: 16px;
+    box-shadow: 0 6px 32px rgba(0,0,0,0.10);
+    padding: 40px 24px 32px 24px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    color: #fff;
+    transition: transform 0.18s, box-shadow 0.18s;
+    border: 3px solid transparent;
+  }
+  
+  .acc-card.catering {
+    background: #24923c;
+  }
+  
+  .acc-card:hover {
+    transform: translateY(-6px) scale(1.02);
+    box-shadow: 0 12px 36px rgba(31,167,214,0.16);
+    border-color: #fff;
+  }
+  
+  .acc-icon {
+    width: 54px;
+    height: 54px;
+    border-radius: 12px;
+    background: #fff;
+    color: #8b2bbf;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2rem;
+    margin-bottom: 18px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.09);
+  }
+  
+  .acc-card.catering .acc-icon {
+    color: #24923c;
+  }
+  
+  .acc-card h2 {
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin-bottom: 18px;
+    letter-spacing: 1px;
+    text-align: center;
+  }
+  
+  .acc-card ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    width: 100%;
+  }
+  
+  .acc-card ul li {
+    font-size: 1.08rem;
+    margin: 12px 0;
+    color: #fff;
+    text-align: center;
+    word-break: break-word;
+  }
+  
+  @media (max-width: 900px) {
+    .acc-cat-grid {
+      gap: 20px;
+    }
+    .acc-card {
+      min-width: 220px;
+      max-width: 96%;
+      padding: 28px 10px 18px 10px;
+    }
+  }
+  
+  @media (max-width: 600px) {
+    .acc-cat-grid {
+      flex-direction: column;
+      gap: 18px;
+      align-items: center;
+    }
+    .acc-card {
+      width: 100%;
+      min-width: 0;
+      max-width: 100%;
+      padding: 18px 6px 14px 6px;
+    }
+    .acc-card h2 {
+      font-size: 1.1rem;
+      margin-bottom: 10px;
+    }
+    .acc-icon {
+      width: 44px;
+      height: 44px;
+      font-size: 1.5rem;
+      margin-bottom: 10px;
+    }
+  }
+  
+  .reg-fees-section {
+    width: 100%;
+    max-width: 1200px;
+    display: flex;
+    justify-content: center;
+    margin: 0 auto 40px auto;
+    padding: 0 16px 32px 16px;
+    background: transparent;
+  }
+  
+  .reg-fees-container {
+    background: linear-gradient(90deg, #8b2bbf 0%, #e14b8a 100%);
+    border-radius: 18px;
+    width: 70%;
+    box-shadow: 0 6px 32px rgba(0,0,0,0.13);
+    padding: 36px 24px 30px 24px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    color: #fff;
+  }
+  
+  .reg-fees-title {
+    font-size: 2rem;
+    font-weight: bold;
+    letter-spacing: 1.5px;
+    margin-bottom: 30px;
+    color: #fff;
+    text-align: center;
+    text-shadow: 0 2px 10px #0a1a3a33;
+  }
+  
+  .reg-fees-grid {
+    display: flex;
+    gap: 32px;
+    justify-content: center;
+    flex-wrap: wrap;
+    width: 100%;
+  }
+  
+  .reg-fees-card {
+    background: rgba(36, 44, 60, 0.22);
+    border-radius: 14px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.07);
+    padding: 32px 28px;
+    min-width: 240px;
+    max-width: 320px;
+    flex: 1 1 240px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    color: #ffd700;
+  }
+  
+  .reg-fees-card h3 {
+    color: #ffd700;
+    font-size: 1.2rem;
+    font-weight: bold;
+    margin-bottom: 18px;
+    letter-spacing: 1px;
+  }
+  
+  .reg-fees-card ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    width: 100%;
+  }
+  
+  .reg-fees-card ul li {
+    color: #fff;
+    font-size: 1.08rem;
+    margin: 12px 0;
+    word-break: break-word;
+  }
+  
+  @media (max-width: 900px) {
+    .reg-fees-grid {
+      gap: 20px;
+    }
+    .reg-fees-card {
+      min-width: 180px;
+      max-width: 96%;
+      padding: 22px 10px;
+    }
+  }
+  
+  @media (max-width: 600px) {
+    .reg-fees-title {
+      font-size: 1.2rem;
+      margin-bottom: 18px;
+    }
+    .reg-fees-grid {
+      flex-direction: column;
+      gap: 14px;
+      align-items: center;
+    }
+    .reg-fees-card {
+      width: 100%;
+      min-width: 0;
+      max-width: 100%;
+      padding: 14px 6px;
+    }
+    .reg-fees-card h3 {
+      font-size: 1rem;
+      margin-bottom: 10px;
+    }
+  }
+  
+  .important-dates-section {
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto 40px auto;
+    padding: 0 16px 32px 16px;
+    background: transparent;
+    display: flex;
+    justify-content: center;
+  }
+  
+  .important-dates-container {
+    background: #0d1d3a;
+    border-radius: 18px;
+    box-shadow: 0 6px 32px rgba(0,0,0,0.13);
+    padding: 36px 28px 30px 28px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    color: #fff;
+    min-width: 290px;
+    max-width: 440px;
+    width: 100%;
+    border: 2px solid #2a3a4f;
+  }
+  
+  .important-dates-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 36px;
+  }
+  
+  .important-dates-icon {
+    font-size: 2rem;
+    color: #4fc3f7;
+    background: #12284a;
+    border-radius: 8px;
+    padding: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .important-dates-title {
+    font-size: 1.6rem;
+    font-weight: bold;
+    letter-spacing: 1.5px;
+    color: #fff;
+    text-shadow: 0 2px 10px #0a1a3a33;
+  }
+  
+  .dates-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 18px 18px;
+    width: 100%;
+  }
+  
+  .date-card {
+    background: #19305a;
+    border-radius: 10px;
+    padding: 22px 16px 18px 16px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    min-width: 120px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.07);
+    border: 2px solid #233a6a;
+    transition: border-color 0.2s;
+  }
+  
+  .date-card:hover {
+    border-color: #4fc3f7;
+  }
+  
+  .date-label {
+    color: #4fc3f7;
+    font-size: 1.08rem;
+    font-weight: 600;
+    margin-bottom: 8px;
+    letter-spacing: 0.5px;
+  }
+  
+  .date-value {
+    color: #fff;
+    font-size: 1.1rem;
+    font-weight: 500;
+    letter-spacing: 0.5px;
+  }
+  
+  @media (max-width: 600px) {
+    .important-dates-container {
+      padding: 18px 6px 18px 6px;
+      min-width: 0;
+      max-width: 100%;
+    }
+    .important-dates-header {
+      gap: 8px;
+      margin-bottom: 22px;
+    }
+    .important-dates-title {
+      font-size: 1.1rem;
+    }
+    .dates-grid {
+      grid-template-columns: 1fr;
+      gap: 10px 0;
+    }
+    .date-card {
+      padding: 14px 8px 12px 8px;
+    }
+    .date-label {
+      font-size: 0.99rem;
+      margin-bottom: 4px;
+    }
+    .date-value {
+      font-size: 1rem;
+    }
+  }
+  
+  .follow-adventure-section {
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto 40px auto;
+    padding: 0 16px 32px 16px;
+    background: transparent;
+    display: flex;
+    justify-content: center;
+  }
+  
+  .follow-adventure-container {
+    background: #17223b;
+    border: 2px solid #4fc3f7;
+    border-radius: 14px;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.12);
+    padding: 32px 22px 26px 22px;
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    width: 100%;
+    max-width: 540px;
+  }
+  
+  .follow-adventure-icon {
+    font-size: 2.1rem;
+    color: #4fc3f7;
+    background: #0d1d3a;
+    border-radius: 50%;
+    padding: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 48px;
+    min-height: 48px;
+  }
+  
+  .follow-adventure-content {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    flex: 1;
+  }
+  
+  .follow-adventure-title {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #fff;
+    letter-spacing: 1px;
+    margin-bottom: 4px;
+  }
+  
+  .follow-adventure-desc {
+    color: #cbd5e1;
+    font-size: 1.08rem;
+    margin-bottom: 8px;
+  }
+  
+  .follow-adventure-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    align-items: center;
+    font-size: 1.1rem;
+  }
+  
+  .adventure-link {
+    color: #4fc3f7;
+    font-weight: 500;
+    letter-spacing: 0.5px;
+  }
+  
+  .adventure-sep {
+    color: #cbd5e1;
+    font-size: 1.1rem;
+    margin: 0 2px;
+  }
+  
+  @media (max-width: 600px) {
+    .follow-adventure-container {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 10px;
+      padding: 18px 8px 14px 8px;
+      max-width: 100%;
+    }
+    .follow-adventure-icon {
+      font-size: 1.3rem;
+      padding: 8px;
+      min-width: 32px;
+      min-height: 32px;
+    }
+    .follow-adventure-title {
+      font-size: 1.08rem;
+    }
+    .follow-adventure-desc {
+      font-size: 0.95rem;
+    }
+    .follow-adventure-links {
+      font-size: 0.98rem;
+      gap: 5px;
+    }
+  }
+  
+  

@@ -1,0 +1,104 @@
+@import url('https://fonts.cdnfonts.com/css/badaboom-bb');
+
+.navbar {
+  z-index: 999;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 5rem;
+  width: 100%;
+  background-color: #FF194C;
+  padding: 0 1.5rem;
+}
+
+.logo {
+  height: 6rem;
+  object-fit: contain;
+  margin-left: 2rem;
+}
+
+/* Hamburger Menu Icon */
+.hamburger {
+  display: none;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 30px;
+  height: 22px;
+  cursor: pointer;
+  z-index: 1001;
+  margin-right: 2.5rem;
+}
+
+.bar {
+  height: 3px;
+  width: 100%;
+  background-color: #FBCA03;
+  transition: 0.3s;
+}
+
+/* Navigation Items */
+.navitems {
+  list-style: none;
+  display: flex;
+  gap: 2rem;
+  z-index: 1000;
+}
+
+.navitems li {
+  color: #FBCA03;
+  font-family: 'BadaBoom BB', sans-serif;
+  font-size: 2rem;
+  -webkit-text-stroke: black 0.08rem;
+  text-shadow: 2px 4px 4px black;
+}
+
+.navitems li:hover {
+  transform: scale(1.05);
+  transition: 200ms ease;
+}
+
+.navlinks {
+  text-decoration: none;
+  color: inherit;
+  margin-right: 2.5rem;
+}
+
+/* --------- RESPONSIVE STYLES --------- */
+@media (max-width: 768px) {
+  .hamburger {
+    display: flex;
+
+  }
+
+  .navitems {
+    position: absolute;
+    top: 3rem;
+    right: 0;
+    flex-direction: column;
+    background-color: #FF194C;
+    width: 60%;
+    border-radius: 2rem;
+    text-align: center;
+    padding: 2rem 0;
+    display: none;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    transition: all 0.3s ease-in-out;
+  }
+
+  .navitems.open {
+    display: flex;
+  }
+
+  .navitems li {
+    font-size: 1.5rem;
+    padding: 0.5rem 0;
+  }
+
+  .logo {
+    height: 3.5rem;
+    padding: 0;
+  }
+}
