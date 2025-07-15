@@ -357,6 +357,87 @@ def export_verified_event_registrations(request):
     wb.save(response)
     return response
 
+CATEGORY_EVENT_MAP = {
+    'fine_arts': {
+        'face_painting', 'pot_painting', 'mehendi', 'sketching', 'painting'
+    },
+    'dance': {
+        'solo_dance', 'duet_dance', 'chorea_theme', 'chorea_nontheme', 'show_down'
+    },
+    'music': {
+        'tinnitus', 'alaap', 'euphony', 'raag_rangmanch', 'solo_singing', 'solo_instrumental'
+    },
+    'drama': {
+        'play', 'skit', 'mime', 'adzap', 'variety', 'dernier_cri'
+    },
+    'sports': {
+        'cricket', 'football', 'basketball_men', 'basketball_women', 'volleyball_men',
+        'volleyball_women', 'hockey_men', 'hockey_women', 'futsal', 'chess_bullet',
+        'chess_rapid', 'chess_blitz', 'carroms', 'throwball_men', 'throwball_women',
+        'tennis', 'aquatics', 'badminton', 'table_tennis', 'athletics'
+    },
+    'literary': {
+        'malarkey', 'shipwrecked', 'turncoat', 'scrabble', 'formal_debate',
+        'cryptic_crossword', 'ppt_karaoke', 'potpourri'
+    },
+    'quiz': {
+        'india_quiz', 'fandom_quiz', 'sports_quiz', 'rewind_quiz', 'formal_quiz',
+        'tj_jaishankar_memorial_quiz', 'jam'
+    }
+}
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated, IsAdminUser])
+def export_event_by_name(request, event_name):
+    event_name = event_name.lower()
+    regs = EventRegistration.objects.filter(is_verified=True)
+
+    # Filter registrations where this event is included
+    filtered_regs = [
+        reg for reg in regs
+        if event_name in (e.lower() for e in reg.events)
+    ]
+
+    if not filtered_regs:
+        return Response({'error': f'No verified registrations found for "{event_name}"'}, status=404)
+
+    wb = openpyxl.Workbook()
+    ws = wb.active
+    ws.title = event_name.replace("_", " ").title()
+
+    headers = [
+        "User ID", "Name", "Email", "Phone", "College", "Events",
+        "Delegate IDs", "Amount", "Status", "Transaction ID", "Verified At", "Date"
+    ]
+    ws.append(headers)
+
+    for r in filtered_regs:
+        ws.append([
+            r.user_id,
+            r.name,
+            r.email,
+            r.phone,
+            r.college,
+            ", ".join(r.events),
+            ", ".join(r.delegate_id or []),
+            r.amount,
+            r.status,
+            r.transaction_id,
+            r.verified_at.strftime("%Y-%m-%d %H:%M") if r.verified_at else "",
+            r.created_at.strftime("%Y-%m-%d")
+        ])
+
+    for i in range(1, len(headers) + 1):
+        ws.column_dimensions[get_column_letter(i)].width = 22
+
+    response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+    filename = f"{event_name}_event.xlsx"
+    response['Content-Disposition'] = f'attachment; filename={filename}'
+    wb.save(response)
+    return response
+
+
+
 # Pass Purchase Views
 class PassPurchaseView(APIView):
     permission_classes = [permissions.AllowAny]

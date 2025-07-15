@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import axiosInstance from '../utils/axiosInstance'
 import { toast } from 'react-toastify'
 import LogoutButton from '../admin/LogoutButton'
+import './adminStyles.css'
 
 const DelegateCardTable = () => {
   const [data, setData] = useState([])
@@ -68,7 +69,7 @@ const DelegateCardTable = () => {
   useEffect(() => { fetchData() }, [])
 
   return (
-    <div>
+    <div className='admin-container'>
       <LogoutButton />
       <h2>Delegate Cards</h2>
       <button onClick={handleExport} disabled={loading}>
@@ -78,7 +79,7 @@ const DelegateCardTable = () => {
       {loading ? (
         <p>Loading data...</p>
       ) : (
-        <table>
+        <table className='admin-table'>
           <thead>
             <tr>
               <th>Name</th>
@@ -107,13 +108,13 @@ const DelegateCardTable = () => {
                 <td>
                   {!row.is_verified && (
                     <>
-                      <button 
+                      <button className='admin-button' 
                         onClick={() => handleVerify(row.id)}
                         disabled={processingId === row.id}
                       >
                         {processingId === row.id ? 'Verifying...' : 'Verify'}
                       </button>
-                      <button 
+                      <button className='admin-button' 
                         onClick={() => handleReject(row.id)}
                         disabled={processingId === row.id}
                       >
