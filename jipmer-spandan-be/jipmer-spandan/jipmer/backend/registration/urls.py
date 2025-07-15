@@ -2,6 +2,7 @@ from django.urls import path
 from .views import (
     DelegateCardRegisterView, verify_registration, reject_delegate_registration, export_verified_delegate_cards,
     EventRegisterView, verify_event_registration, reject_event_registration_soft, export_verified_event_registrations,
+    export_event_by_name,
     PassPurchaseView, verify_pass, reject_pass_soft, export_verified_passes, check_delegate_eligibility
 )
 
@@ -21,4 +22,5 @@ urlpatterns = [
     path('pass-purchase/verify/<int:pk>/', verify_pass, name='verify-pass'),
     path('pass-purchase/reject/<int:pk>/', reject_pass_soft, name='reject-pass'),
     path('pass-purchase/export/', export_verified_passes, name='export-pass'),
+    path('event-register/export/event/<str:event_name>/', export_event_by_name),
 ]

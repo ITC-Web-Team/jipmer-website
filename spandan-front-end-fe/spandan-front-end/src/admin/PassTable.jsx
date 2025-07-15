@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import axiosInstance from '../utils/axiosInstance'
 import LogoutButton from './LogoutButton'
+import './adminStyles.css'
 
 const PassTable = () => {
   const [data, setData] = useState([])
@@ -69,11 +70,11 @@ const PassTable = () => {
   useEffect(() => { fetchData() }, [])
 
   return (
-    <div>
+    <div className='admin-container'>
       <LogoutButton />
       <h3>Pass Purchases</h3>
-      <button onClick={downloadExcel}>Download Excel</button>
-      <table border="1">
+      <button className='admin-button' onClick={downloadExcel}>Download Excel</button>
+      <table className='admin-table' border="1">
         <thead>
           <tr><th>Name</th><th>Email</th><th>Pass</th><th>Screenshot</th><th>Verified</th><th>Action</th></tr>
         </thead>
@@ -89,8 +90,8 @@ const PassTable = () => {
                   : '-'}
               </td>
               <td>{row.is_verified ? '✅' : '❌'}</td>
-              <td>{!row.is_verified && <button onClick={() => verify(row.id)}>Verify</button>}</td>
-              <td>{!row.is_verified && <button onClick={() => reject(row.id)}>Reject</button>}</td>
+              <td>{!row.is_verified && <button className='admin-button' onClick={() => verify(row.id)}>Verify</button>}</td>
+              <td>{!row.is_verified && <button className='admin-button' onClick={() => reject(row.id)}>Reject</button>}</td>
             </tr>
           ))}
         </tbody>

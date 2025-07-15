@@ -1,0 +1,31 @@
+.admin-container {
+  background: white;
+  color: black;
+  padding: 2rem;
+  font-family: sans-serif;
+}
+
+.admin-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 1rem;
+}
+
+.admin-table th, .admin-table td {
+  border: 1px solid #ccc;
+  padding: 8px;
+}
+
+.admin-button {
+  margin: 0.25rem;
+  padding: 0.4rem 0.8rem;
+  background-color: #007bff;
+  border: none;
+  color: white;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.admin-button.reject {
+  background-color: #f44336;
+}
