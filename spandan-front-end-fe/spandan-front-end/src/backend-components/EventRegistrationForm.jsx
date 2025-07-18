@@ -101,7 +101,7 @@ const EventRegistrationForm = () => {
     phone: '',
     college: '',
     events: [],
-    delegate_id: [''],
+    delegate_info: [{ delegate_id: '', email: '', phone: '' }],
     transaction_id: '',
     payment_screenshot: null
   });
@@ -162,20 +162,21 @@ const EventRegistrationForm = () => {
     }));
   };
 
-  const handleDelegateIdChange = (index, value) => {
-    const updated = [...formData.delegate_id];
-    updated[index] = value;
-    setFormData({ ...formData, delegate_id: updated });
+  const handleTeammateChange = (index, field, value) => {
+    const updated = [...formData.delegate_info];
+    updated[index] = { ...updated[index], [field]: value };
+    setFormData({ ...formData, delegate_info: updated });
   };
 
-  const addDelegateId = () => {
-    setFormData({ ...formData, delegate_id: [...formData.delegate_id, ''] });
+  const addTeammate = () => {
+    setFormData({ ...formData, delegate_info: [...formData.delegate_info, {delegate_id: '', email: '', phone: '' }]
+    });
   };
 
-  const removeDelegateId = (index) => {
-    const updated = [...formData.delegate_id];
+  const removeTeammate = (index) => {
+    const updated = [...formData.delegate_info];
     updated.splice(index, 1);
-    setFormData({ ...formData, delegate_id: updated });
+    setFormData({ ...formData, delegate_info: updated });
   };
 
   const handleFileChange = (e) => {
@@ -213,11 +214,10 @@ const EventRegistrationForm = () => {
       // Properly stringify arrays
       data.append('events', JSON.stringify(formData.events));
       
-      // Handle delegate_id only if not empty
-      if (formData.delegate_id.some(id => id.trim() !== '')) {
-        data.append('delegate_id', JSON.stringify(
-          formData.delegate_id.filter(id => id.trim() !== '')
-        ));
+      const validTeammates = formData.delegate_info.filter(t => t.delegate_id.trim() !== '' && t.email.trim() !== '');
+
+      if(validTeammates.length > 0) {
+        data.append('delegate_info', JSON.stringify(validTeammates));
       }
 
       // Payment fields
@@ -343,20 +343,32 @@ const EventRegistrationForm = () => {
             ))}
           </div>
 
-          {/* Delegate IDs */}
-          <div className="delegate-section">
-            <h3>Team Members (Delegate IDs)</h3>
-            {formData.delegate_id.map((id, index) => (
-              <div key={index} className="delegate-input">
+          <div className="teammate-section">
+            <h3>Team Members</h3>
+            {formData.delegate_info.map((teammate, index) => (
+              <div key={index} className="teammate-input-group">
                 <input
-                  value={id}
-                  onChange={(e) => handleDelegateIdChange(index, e.target.value)}
-                  placeholder={`Delegate ID ${index + 1}`}
+                  value={teammate.delegate_id}
+                  onChange={(e) => handleTeammateChange(index, 'delegate_id', e.target.value)}
+                  placeholder="Delegate ID"
+                  required={index === 0}
+                />
+                <input
+                  type="email"
+                  value={teammate.email}
+                  onChange={(e) => handleTeammateChange(index, 'email', e.target.value)}
+                  placeholder="Email"
+                  required={index === 0}
+                />
+                <input
+                  value={teammate.phone}
+                  onChange={(e) => handleTeammateChange(index, 'phone', e.target.value)}
+                  placeholder="Phone"
                 />
                 {index > 0 && (
                   <button 
                     type="button" 
-                    onClick={() => removeDelegateId(index)}
+                    onClick={() => removeTeammate(index)}
                     className="remove-btn"
                   >
                     Remove
@@ -366,7 +378,7 @@ const EventRegistrationForm = () => {
             ))}
             <button 
               type="button" 
-              onClick={addDelegateId}
+              onClick={addTeammate}
               className="add-btn"
             >
               Add Team Member

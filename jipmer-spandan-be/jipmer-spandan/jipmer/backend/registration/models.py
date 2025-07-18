@@ -1,6 +1,7 @@
 from django.db import models
 from django.utils import timezone
 import random
+from django.contrib.postgres.fields import ArrayField
 
 # Delegate Card Model
 TIERS = (('tier1', 'Issue #1'), ('tier2', 'Deluxe Edition'), ('tier3', 'Collectors Print'))
@@ -38,7 +39,7 @@ class EventRegistration(models.Model):
     phone = models.CharField(max_length=15)
     college = models.CharField(max_length=100)
     events = models.JSONField()
-    delegate_id = models.JSONField(blank=True, null=True)
+    
     amount = models.PositiveIntegerField(default=0)
     payment_screenshot = models.ImageField(upload_to='event_payments/', null=True, blank=True)
     user_id = models.CharField(max_length=20, blank=True)
@@ -47,6 +48,8 @@ class EventRegistration(models.Model):
     is_verified = models.BooleanField(default=False)
     verified_at = models.DateTimeField(null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
+
+    delegate_info = models.JSONField(blank=True, null=True)
 
     def save(self, *args, **kwargs):
         if not self.user_id:

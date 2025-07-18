@@ -11,14 +11,34 @@ class DelegateCardRegistrationSerializer(serializers.ModelSerializer):
 
 class EventRegistrationSerializer(serializers.ModelSerializer):
     payment_screenshot = serializers.ImageField(required=False, allow_null=True)
-    delegate_id = serializers.JSONField(required=False, allow_null=True)
+    delegate_info = serializers.JSONField(required=False, allow_null=True)
     amount = serializers.IntegerField(required=False)
     
     class Meta:
         model = EventRegistration
         fields = '__all__'
         read_only_fields = ['user_id', 'amount', 'is_verified', 'status', 'verified_at', 'created_at']
+
+    def validate_delegate_info(self, value):
+        if not value:
+            return value
         
+        for teammate in value:
+            if not all(k in teammate for k in ['delegate_id', 'email']):
+                raise serializers.ValidationError("Each teammate must have delegate_id, email")
+            try:
+                DelegateCardRegistration.objects.get(
+                    user_id = teammate['delegate_id'],
+                    email = teammate['email'].lower().strip(),
+                    is_verified = True
+                )
+            except DelegateCardRegistration.DoesNotExist:
+                raise serializers.ValidationError(
+                    f"Delegate {teammate['delegate_id']} with email {teammate['email']} not verified"
+                )
+        return value
+            
+
     def validate_events(self, value):
         if not value or len(value) == 0:
             raise serializers.ValidationError("At least one event must be selected")

@@ -137,17 +137,25 @@ class EventRegisterView(APIView):
         try:
             data = request.data.dict()  # Convert QueryDict to regular dict
             
-            # Parse JSON fields
-            json_fields = ['events', 'delegate_id']
-            for field in json_fields:
-                if field in data and isinstance(data[field], str):
-                    try:
-                        data[field] = json.loads(data[field])
-                    except json.JSONDecodeError:
-                        return Response(
-                            {field: "Invalid JSON format"},
-                            status=status.HTTP_400_BAD_REQUEST
-                        )
+            # Parse delegate_info if provided
+            if 'delegate_info' in data and isinstance(data['delegate_info'], str):
+                try:
+                    data['delegate_info'] = json.loads(data['delegate_info'])
+                except json.JSONDecodeError:
+                    return Response(
+                        {"delegate_info": "Invalid JSON format"},
+                        status=status.HTTP_400_BAD_REQUEST
+                    )
+
+            # Parse events field
+            if 'events' in data and isinstance(data['events'], str):
+                try:
+                    data['events'] = json.loads(data['events'])
+                except json.JSONDecodeError:
+                    return Response(
+                        {"events": "Invalid JSON format"},
+                        status=status.HTTP_400_BAD_REQUEST
+                    )
 
             email = data.get("email", "").lower().strip()
             selected_events = data.get("events", [])
@@ -157,26 +165,6 @@ class EventRegisterView(APIView):
                     {"events": "At least one event must be selected"},
                     status=status.HTTP_400_BAD_REQUEST
                 )
-
-            # Validate delegate IDs if provided
-            delegate_ids = data.get("delegate_id", [])
-            if delegate_ids:
-                if not isinstance(delegate_ids, list):
-                    return Response(
-                        {"delegate_id": "Must be an array"},
-                        status=status.HTTP_400_BAD_REQUEST
-                    )
-                
-                with transaction.atomic():
-                    for delegate_id in delegate_ids:
-                        if not DelegateCardRegistration.objects.filter(
-                            user_id=delegate_id.strip(),
-                            is_verified=True
-                        ).exists():
-                            return Response(
-                                {"error": f"Delegate {delegate_id} not verified"},
-                                status=status.HTTP_400_BAD_REQUEST
-                            )
 
             # Check event requirements
             needs_delegate = any(
@@ -195,6 +183,7 @@ class EventRegisterView(APIView):
                     {"error": "Delegate card or valid pass required for selected events"},
                     status=status.HTTP_403_FORBIDDEN
                 )
+
             EVENT_PRICE_MAP = {
                 # Fine Arts
                 'face_painting': 100,
@@ -268,6 +257,7 @@ class EventRegisterView(APIView):
 
             amount = sum(EVENT_PRICE_MAP.get(event, 0) for event in selected_events)
             data['amount'] = amount
+            
             serializer = EventRegistrationSerializer(data=data)
             if serializer.is_valid():
                 reg = serializer.save()
@@ -336,26 +326,65 @@ def reject_event_registration_soft(request, pk):
 @api_view(['GET'])
 @permission_classes([IsAuthenticated, IsAdminUser])
 def export_verified_event_registrations(request):
-    regs = EventRegistration.objects.filter(is_verified=True)
-    wb = openpyxl.Workbook()
-    ws = wb.active
-    ws.title = "Event Registrations"
-    headers = ["User ID", "Name", "Email", "Phone", "College", "Events", "Delegate IDs", "Amount", "Status", "Transaction ID", "Verified At", "Date"]
-    ws.append(headers)
-    for r in regs:
-        ws.append([
-            r.user_id, r.name, r.email, r.phone, r.college,
-            ", ".join(r.events), ", ".join(r.delegate_id or []),
-            r.amount, r.status, r.transaction_id,
-            r.verified_at.strftime("%Y-%m-%d %H:%M") if r.verified_at else "", 
-            r.created_at.strftime("%Y-%m-%d")
-        ])
-    for i in range(1, len(headers) + 1):
-        ws.column_dimensions[get_column_letter(i)].width = 22
-    response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
-    response['Content-Disposition'] = 'attachment; filename=event_registrations.xlsx'
-    wb.save(response)
-    return response
+    try:
+        regs = EventRegistration.objects.filter(is_verified=True)
+        wb = openpyxl.Workbook()
+        ws = wb.active
+        ws.title = "Event Registrations"
+        
+        # Base headers
+        headers = [
+            "User ID", "Name", "Email", "Phone", "College", "Events",
+            "Amount", "Status", "Transaction ID", "Verified At", "Date"
+        ]
+        
+        # Calculate max teammates and add columns
+        max_teammates = max(len(reg.delegate_info or []) for reg in regs) if regs else 0
+        for i in range(1, max_teammates + 1):
+            headers.extend([
+                f"Teammate {i} ID",
+                f"Teammate {i} Email",
+                f"Teammate {i} Phone"
+            ])
+        
+        ws.append(headers)
+        
+        for r in regs:
+            row = [
+                r.user_id, r.name, r.email, r.phone, r.college,
+                ", ".join(r.events),
+                r.amount, r.status, r.transaction_id,
+                r.verified_at.strftime("%Y-%m-%d %H:%M") if r.verified_at else "", 
+                r.created_at.strftime("%Y-%m-%d")
+            ]
+            
+            # Add teammate info
+            for teammate in (r.delegate_info or []):
+                row.extend([
+                    teammate.get('delegate_id', ''),
+                    teammate.get('email', ''),
+                    teammate.get('phone', '')
+                ])
+            
+            # Fill empty cells if needed
+            row.extend([''] * (3 * (max_teammates - len(r.delegate_info or []))))
+            
+            ws.append(row)
+        
+        # Adjust column widths
+        for i, header in enumerate(headers, 1):
+            ws.column_dimensions[get_column_letter(i)].width = max(20, len(header) + 2)
+        
+        response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+        response['Content-Disposition'] = 'attachment; filename=event_registrations.xlsx'
+        wb.save(response)
+        return response
+        
+    except Exception as e:
+        return Response(
+            {"error": "Export failed", "details": str(e)},
+            status=status.HTTP_500_INTERNAL_SERVER_ERROR
+        )
 
 CATEGORY_EVENT_MAP = {
     'fine_arts': {
@@ -389,53 +418,87 @@ CATEGORY_EVENT_MAP = {
 @api_view(['GET'])
 @permission_classes([IsAuthenticated, IsAdminUser])
 def export_event_by_name(request, event_name):
-    event_name = event_name.lower()
-    regs = EventRegistration.objects.filter(is_verified=True)
+    try:
+        event_name = event_name.lower()
+        
+        # Validate event exists
+        valid_events = set().union(*CATEGORY_EVENT_MAP.values())
+        if event_name not in valid_events:
+            return Response(
+                {"error": f"Invalid event name: {event_name}"},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        
+        # Filter registrations containing this event
+        regs = EventRegistration.objects.filter(
+            is_verified=True,
+            events__contains=[event_name]
+        )
+        
+        if not regs.exists():
+            return Response(
+                {"error": f"No registrations found for {event_name}"},
+                status=status.HTTP_404_NOT_FOUND
+            )
+        
+        wb = openpyxl.Workbook()
+        ws = wb.active
+        ws.title = event_name.replace("_", " ").title()
 
-    # Filter registrations where this event is included
-    filtered_regs = [
-        reg for reg in regs
-        if event_name in (e.lower() for e in reg.events)
-    ]
+        # Base headers
+        headers = [
+            "User ID", "Name", "Email", "Phone", "College", "Events",
+            "Amount", "Status", "Transaction ID", "Verified At", "Date"
+        ]
+        
+        # Add teammate columns
+        max_teammates = max(len(reg.delegate_info or []) for reg in regs)
+        for i in range(1, max_teammates + 1):
+            headers.extend([
+                f"Teammate {i} ID",
+                f"Teammate {i} Email",
+                f"Teammate {i} Phone"
+            ])
+        
+        ws.append(headers)
 
-    if not filtered_regs:
-        return Response({'error': f'No verified registrations found for "{event_name}"'}, status=404)
+        for r in regs:
+            row = [
+                r.user_id, r.name, r.email, r.phone, r.college,
+                ", ".join(r.events),
+                r.amount, r.status, r.transaction_id,
+                r.verified_at.strftime("%Y-%m-%d %H:%M") if r.verified_at else "",
+                r.created_at.strftime("%Y-%m-%d")
+            ]
+            
+            # Add teammate info
+            for teammate in (r.delegate_info or []):
+                row.extend([
+                    teammate.get('delegate_id', ''),
+                    teammate.get('email', ''),
+                    teammate.get('phone', '')
+                ])
+            
+            # Fill empty cells if needed
+            row.extend([''] * (3 * (max_teammates - len(r.delegate_info or []))))
+            
+            ws.append(row)
 
-    wb = openpyxl.Workbook()
-    ws = wb.active
-    ws.title = event_name.replace("_", " ").title()
+        # Adjust column widths
+        for i, header in enumerate(headers, 1):
+            ws.column_dimensions[get_column_letter(i)].width = max(20, len(header) + 2)
 
-    headers = [
-        "User ID", "Name", "Email", "Phone", "College", "Events",
-        "Delegate IDs", "Amount", "Status", "Transaction ID", "Verified At", "Date"
-    ]
-    ws.append(headers)
-
-    for r in filtered_regs:
-        ws.append([
-            r.user_id,
-            r.name,
-            r.email,
-            r.phone,
-            r.college,
-            ", ".join(r.events),
-            ", ".join(r.delegate_id or []),
-            r.amount,
-            r.status,
-            r.transaction_id,
-            r.verified_at.strftime("%Y-%m-%d %H:%M") if r.verified_at else "",
-            r.created_at.strftime("%Y-%m-%d")
-        ])
-
-    for i in range(1, len(headers) + 1):
-        ws.column_dimensions[get_column_letter(i)].width = 22
-
-    response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
-    filename = f"{event_name}_event.xlsx"
-    response['Content-Disposition'] = f'attachment; filename={filename}'
-    wb.save(response)
-    return response
-
+        response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+        filename = f"{event_name}_registrations.xlsx"
+        response['Content-Disposition'] = f'attachment; filename={filename}'
+        wb.save(response)
+        return response
+        
+    except Exception as e:
+        return Response(
+            {"error": "Export failed", "details": str(e)},
+            status=status.HTTP_500_INTERNAL_SERVER_ERROR
+        )
 
 
 # Pass Purchase Views
