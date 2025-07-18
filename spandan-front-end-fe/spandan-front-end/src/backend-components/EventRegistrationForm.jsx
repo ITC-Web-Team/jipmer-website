@@ -169,7 +169,7 @@ const EventRegistrationForm = () => {
   };
 
   const addTeammate = () => {
-    setFormData({ ...formData, delegate_info: [...formData.delegate_info, {delegate_id: '', email: '', phone: '' }]
+    setFormData({ ...formData, delegate_info: [...formData.delegate_info, {delegate_id: '', name: '', email: '', phone: '' }]
     });
   };
 
@@ -214,7 +214,7 @@ const EventRegistrationForm = () => {
       // Properly stringify arrays
       data.append('events', JSON.stringify(formData.events));
       
-      const validTeammates = formData.delegate_info.filter(t => t.delegate_id.trim() !== '' && t.email.trim() !== '');
+      const validTeammates = formData.delegate_info.filter(t => t.delegate_id.trim() !== '' && t.name.trim() !== '' && t.email.trim() !== '');
 
       if(validTeammates.length > 0) {
         data.append('delegate_info', JSON.stringify(validTeammates));
@@ -352,6 +352,8 @@ const EventRegistrationForm = () => {
                   onChange={(e) => handleTeammateChange(index, 'delegate_id', e.target.value)}
                   placeholder="Delegate ID"
                   required={index === 0}
+                />
+                <input value={teammate.name} onChange={(e) => handleTeammateChange(index, 'name', e.target.value)} placeholder='Name' required={index===0}
                 />
                 <input
                   type="email"

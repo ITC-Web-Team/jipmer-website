@@ -14,6 +14,9 @@ import json
 from django.db import transaction
 from rest_framework.parsers import MultiPartParser, FormParser
 
+import logging
+logger = logging.getLogger(__name__)
+
 # Constants
 EXEMPT_EVENTS = {
     'snap_saga', 'verse', 'reel_realm',
@@ -27,6 +30,35 @@ CULT_EVENTS = {'solo_dance', 'duet_dance', 'mono_act', 'street_play', 'meme_maki
 CULT_MAJOR_EVENTS = {'chorea', 'alaap', 'tinnitus', 'dernier_cri'}
 LIT_EVENTS = {'debate', 'poetry', 'essay', 'elocution'}
 QUIZ_EVENTS = {'medical_quiz', 'general_quiz'}
+
+CATEGORY_EVENT_MAP = {
+    'fine_arts': {
+        'face_painting', 'pot_painting', 'mehendi', 'sketching', 'painting'
+    },
+    'dance': {
+        'solo_dance', 'duet_dance', 'chorea_theme', 'chorea_nontheme', 'show_down'
+    },
+    'music': {
+        'tinnitus', 'alaap', 'euphony', 'raag_rangmanch', 'solo_singing', 'solo_instrumental'
+    },
+    'drama': {
+        'play', 'skit', 'mime', 'adzap', 'variety', 'dernier_cri'
+    },
+    'sports': {
+        'cricket', 'football', 'basketball_men', 'basketball_women', 'volleyball_men',
+        'volleyball_women', 'hockey_men', 'hockey_women', 'futsal', 'chess_bullet',
+        'chess_rapid', 'chess_blitz', 'carroms', 'throwball_men', 'throwball_women',
+        'tennis', 'aquatics', 'badminton', 'table_tennis', 'athletics'
+    },
+    'literary': {
+        'malarkey', 'shipwrecked', 'turncoat', 'scrabble', 'formal_debate',
+        'cryptic_crossword', 'ppt_karaoke', 'potpourri'
+    },
+    'quiz': {
+        'india_quiz', 'fandom_quiz', 'sports_quiz', 'rewind_quiz', 'formal_quiz',
+        'tj_jaishankar_memorial_quiz', 'jam'
+    }
+}
 
 # Delegate Card Views
 class DelegateCardRegisterView(APIView):
@@ -332,44 +364,45 @@ def export_verified_event_registrations(request):
         ws = wb.active
         ws.title = "Event Registrations"
         
-        # Base headers
+        # Headers
         headers = [
-            "User ID", "Name", "Email", "Phone", "College", "Events",
-            "Amount", "Status", "Transaction ID", "Verified At", "Date"
+            "Type", "User ID", "Name", "Email", "Phone", "College", 
+            "Events", "Amount", "Status", "Transaction ID", 
+            "Verified At", "Date"
         ]
-        
-        # Calculate max teammates and add columns
-        max_teammates = max(len(reg.delegate_info or []) for reg in regs) if regs else 0
-        for i in range(1, max_teammates + 1):
-            headers.extend([
-                f"Teammate {i} ID",
-                f"Teammate {i} Email",
-                f"Teammate {i} Phone"
-            ])
-        
         ws.append(headers)
         
         for r in regs:
-            row = [
+            # Main registrant
+            ws.append([
+                "Main Registrant",
                 r.user_id, r.name, r.email, r.phone, r.college,
                 ", ".join(r.events),
                 r.amount, r.status, r.transaction_id,
                 r.verified_at.strftime("%Y-%m-%d %H:%M") if r.verified_at else "", 
                 r.created_at.strftime("%Y-%m-%d")
-            ]
+            ])
             
-            # Add teammate info
-            for teammate in (r.delegate_info or []):
-                row.extend([
+            # Teammates
+            for i, teammate in enumerate(r.delegate_info or [], 1):
+                # Get delegate details from database
+                delegate = DelegateCardRegistration.objects.filter(
+                    user_id=teammate.get('delegate_id'),
+                    email=teammate.get('email')
+                ).first()
+                
+                ws.append([
+                    f"Teammate {i}",
                     teammate.get('delegate_id', ''),
+                    delegate.name if delegate else '',
                     teammate.get('email', ''),
-                    teammate.get('phone', '')
+                    teammate.get('phone', ''),
+                    delegate.college_name if delegate else '',
+                    "", "", "", "", "", ""  # Empty fields for alignment
                 ])
             
-            # Fill empty cells if needed
-            row.extend([''] * (3 * (max_teammates - len(r.delegate_info or []))))
-            
-            ws.append(row)
+            # Add empty row between registrations
+            ws.append([])
         
         # Adjust column widths
         for i, header in enumerate(headers, 1):
@@ -386,40 +419,13 @@ def export_verified_event_registrations(request):
             status=status.HTTP_500_INTERNAL_SERVER_ERROR
         )
 
-CATEGORY_EVENT_MAP = {
-    'fine_arts': {
-        'face_painting', 'pot_painting', 'mehendi', 'sketching', 'painting'
-    },
-    'dance': {
-        'solo_dance', 'duet_dance', 'chorea_theme', 'chorea_nontheme', 'show_down'
-    },
-    'music': {
-        'tinnitus', 'alaap', 'euphony', 'raag_rangmanch', 'solo_singing', 'solo_instrumental'
-    },
-    'drama': {
-        'play', 'skit', 'mime', 'adzap', 'variety', 'dernier_cri'
-    },
-    'sports': {
-        'cricket', 'football', 'basketball_men', 'basketball_women', 'volleyball_men',
-        'volleyball_women', 'hockey_men', 'hockey_women', 'futsal', 'chess_bullet',
-        'chess_rapid', 'chess_blitz', 'carroms', 'throwball_men', 'throwball_women',
-        'tennis', 'aquatics', 'badminton', 'table_tennis', 'athletics'
-    },
-    'literary': {
-        'malarkey', 'shipwrecked', 'turncoat', 'scrabble', 'formal_debate',
-        'cryptic_crossword', 'ppt_karaoke', 'potpourri'
-    },
-    'quiz': {
-        'india_quiz', 'fandom_quiz', 'sports_quiz', 'rewind_quiz', 'formal_quiz',
-        'tj_jaishankar_memorial_quiz', 'jam'
-    }
-}
+
 
 @api_view(['GET'])
 @permission_classes([IsAuthenticated, IsAdminUser])
 def export_event_by_name(request, event_name):
     try:
-        event_name = event_name.lower()
+        event_name = event_name.lower().strip()
         
         # Validate event exists
         valid_events = set().union(*CATEGORY_EVENT_MAP.values())
@@ -429,74 +435,119 @@ def export_event_by_name(request, event_name):
                 status=status.HTTP_400_BAD_REQUEST
             )
         
-        # Filter registrations containing this event
-        regs = EventRegistration.objects.filter(
-            is_verified=True,
-            events__contains=[event_name]
-        )
+        # Get all verified registrations first
+        all_regs = EventRegistration.objects.filter(is_verified=True)
         
-        if not regs.exists():
+        # Manual filtering to handle all data formats
+        matching_regs = []
+        for reg in all_regs:
+            # Handle all possible data formats
+            events = []
+            if isinstance(reg.events, list):
+                events = [e.lower() for e in reg.events]
+            elif isinstance(reg.events, str):
+                # Handle old string format
+                if reg.events.startswith('['):
+                    try:
+                        events = json.loads(reg.events.lower())
+                    except json.JSONDecodeError:
+                        events = [reg.events.lower()]
+                else:
+                    events = [e.strip().lower() for e in reg.events.split(',')]
+            
+            # Check if our event is in this registration
+            if event_name in events:
+                matching_regs.append(reg)
+
+        if not matching_regs:
             return Response(
                 {"error": f"No registrations found for {event_name}"},
                 status=status.HTTP_404_NOT_FOUND
             )
         
+        # Create Excel workbook
         wb = openpyxl.Workbook()
         ws = wb.active
-        ws.title = event_name.replace("_", " ").title()
+        ws.title = event_name.replace("_", " ").title()[:31]  # Excel sheet name limit
 
-        # Base headers
+        # Headers
         headers = [
-            "User ID", "Name", "Email", "Phone", "College", "Events",
-            "Amount", "Status", "Transaction ID", "Verified At", "Date"
+            "Type", "User ID", "Name", "Email", "Phone", "College", 
+            "All Events", "Amount", "Status", "Transaction ID", 
+            "Verified At", "Registration Date"
         ]
-        
-        # Add teammate columns
-        max_teammates = max(len(reg.delegate_info or []) for reg in regs)
-        for i in range(1, max_teammates + 1):
-            headers.extend([
-                f"Teammate {i} ID",
-                f"Teammate {i} Email",
-                f"Teammate {i} Phone"
-            ])
-        
         ws.append(headers)
 
-        for r in regs:
-            row = [
-                r.user_id, r.name, r.email, r.phone, r.college,
-                ", ".join(r.events),
-                r.amount, r.status, r.transaction_id,
-                r.verified_at.strftime("%Y-%m-%d %H:%M") if r.verified_at else "",
-                r.created_at.strftime("%Y-%m-%d")
-            ]
+        # Data rows
+        for reg in matching_regs:
+            # Get events in consistent format
+            if isinstance(reg.events, list):
+                events_display = ", ".join(reg.events)
+            else:
+                events_display = str(reg.events)
+
+            # Main registrant
+            ws.append([
+                "Main Registrant",
+                reg.user_id, 
+                reg.name, 
+                reg.email, 
+                reg.phone, 
+                reg.college,
+                events_display,
+                reg.amount, 
+                reg.status, 
+                reg.transaction_id,
+                reg.verified_at.strftime("%Y-%m-%d %H:%M") if reg.verified_at else "",
+                reg.created_at.strftime("%Y-%m-%d")
+            ])
             
-            # Add teammate info
-            for teammate in (r.delegate_info or []):
-                row.extend([
+            # Teammates
+            for i, teammate in enumerate(reg.delegate_info or [], 1):
+                # Get delegate details
+                delegate = None
+                if teammate.get('delegate_id'):
+                    delegate = DelegateCardRegistration.objects.filter(
+                        user_id=teammate.get('delegate_id')
+                    ).first()
+                
+                ws.append([
+                    f"Teammate {i}",
                     teammate.get('delegate_id', ''),
+                    delegate.name if delegate else teammate.get('name', ''),
                     teammate.get('email', ''),
-                    teammate.get('phone', '')
+                    teammate.get('phone', ''),
+                    delegate.college_name if delegate else teammate.get('college', ''),
+                    "", "", "", "", "", ""  # Empty fields for alignment
                 ])
             
-            # Fill empty cells if needed
-            row.extend([''] * (3 * (max_teammates - len(r.delegate_info or []))))
-            
-            ws.append(row)
+            # Add empty row between registrations
+            ws.append([])
 
         # Adjust column widths
         for i, header in enumerate(headers, 1):
             ws.column_dimensions[get_column_letter(i)].width = max(20, len(header) + 2)
 
-        response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+        # Prepare response
+        response = HttpResponse(
+            content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+        )
         filename = f"{event_name}_registrations.xlsx"
         response['Content-Disposition'] = f'attachment; filename={filename}'
         wb.save(response)
+        
         return response
         
     except Exception as e:
+        import traceback
+        logger.error(f"Export failed for {event_name}: {str(e)}\n{traceback.format_exc()}")
         return Response(
-            {"error": "Export failed", "details": str(e)},
+            {
+                "error": "Export failed",
+                "event": event_name,
+                "suggestion": "Check registration data formats",
+                "details": str(e)
+            },
             status=status.HTTP_500_INTERNAL_SERVER_ERROR
         )
 
