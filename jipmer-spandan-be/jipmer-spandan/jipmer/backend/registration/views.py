@@ -96,7 +96,7 @@ def verify_registration(request, pk):
     send_smtp_email(
         to_email=reg.email,
         subject="✅ Delegate Card Verified – Spandan 2025",
-        message=f"Dear {reg.name},\nWe are delighted to confirm your registration as a delegate for Spandan 2025 - Beyond the Veil, scheduled to be held from August 25th to 30th at JIPMER, Puducherry. Your participation is a vital to making this event a success, and we are excited to welcome you to a vibrant lineup of activities and discussions!\n\n🪪 Registration Details:\n\n• Delegate Name: {reg.name}\n• College: {reg.college_name}\n• Tier: {reg.tier.upper()}\n• Delegate ID: {reg.user_id}\n• Date of Registration: {reg.created_at.strftime("%m/%d/%Y")}\n\nYou can use your **Delegate ID** `{reg.user_id}` to complete event registration through our official website.\n\nPlease carry a copy of this email and your college ID at the venue for smooth entry. Event guidelines and schedules will be shared soon.\n\nFor help, contact us at jsa.jipmer@gmail.com.\nWe look forward forward to hosting you at Spandan 2025!\n\nWarm regards,\nSuriya\nPresident, JIPMER Student Association"
+        message=f"Dear {reg.name},\nWe are delighted to confirm your registration as a delegate for Spandan 2025 - The Comic Chronicles, scheduled to be held from August 25th to 30th at JIPMER, Puducherry. Your participation is a vital to making this event a success, and we are excited to welcome you to a vibrant lineup of activities and discussions!\n\n🪪 Registration Details:\n\n• Delegate Name: {reg.name}\n• College: {reg.college_name}\n• Tier: {reg.tier.upper()}\n• Delegate ID: {reg.user_id}\n• Date of Registration: {reg.created_at.strftime("%m/%d/%Y")}\n\nYou can use your **Delegate ID** `{reg.user_id}` to complete event registration through our official website.\n\nPlease carry a copy of this email and your college ID at the venue for smooth entry. Event guidelines and schedules will be shared soon.\n\nFor help, contact us at jsa.jipmer@gmail.com.\nWe look forward forward to hosting you at Spandan 2025!\n\nWarm regards,\nSuriya\nPresident, JIPMER Student Association"
     )
     return Response({"message": "Delegate card verified"}, status=status.HTTP_200_OK)
 
@@ -329,7 +329,7 @@ def verify_event_registration(request, pk):
     send_smtp_email(
         to_email=reg.email,
         subject="✅ Event Registration Verified – Spandan 2025",
-        message=f"Dear {reg.name},\n\nWe are thrilled to confirm your registration for the following events at Spandan 2025 - Beyond the Veil:\n{''.join(f"• {e}\n" for e in reg.events)}\n\n🧾 Registration Details:\nName: {reg.name}\nCollege: {reg.college}\nEmail: {reg.email}\nTotal Paid: ₹{reg.amount}\nEvent ID: {reg.user_id}\n• Date: {reg.created_at.strftime("%m/%d/%Y")}\n\nPlease carry a copy of this confirmation email and your delegate ID(if applicable) during the event.\n\nIf you have questions or need help, feel free to write to us at jsa.jipmer@gmail.com.\nAll the best and see you soon at Spandan 2025!\n\nWarm regards,\nTeam Spandan"
+        message=f"Dear {reg.name},\n\nWe are thrilled to confirm your registration for the following events at Spandan 2025 - The Comic Chronicles:\n{''.join(f"• {e}\n" for e in reg.events)}\n\n🧾 Registration Details:\nName: {reg.name}\nCollege: {reg.college}\nEmail: {reg.email}\nTotal Paid: ₹{reg.amount}\nEvent ID: {reg.user_id}\n• Date: {reg.created_at.strftime("%m/%d/%Y")}\n\nPlease carry a copy of this confirmation email and your delegate ID(if applicable) during the event.\n\nIf you have questions or need help, feel free to write to us at jsa.jipmer@gmail.com.\nAll the best and see you soon at Spandan 2025!\n\nWarm regards,\nTeam Spandan"
     )
     return Response({"message": "Event registration verified"}, status=status.HTTP_200_OK)
 
@@ -426,49 +426,58 @@ def export_verified_event_registrations(request):
 def export_event_by_name(request, event_name):
     try:
         event_name = event_name.lower().strip()
+        logger.info(f"Starting export for event: {event_name}")
+
+        # Get all verified registrations in one query
+        all_regs = EventRegistration.objects.filter(is_verified=True).only(
+            'user_id', 'name', 'email', 'phone', 'college', 
+            'events', 'amount', 'status', 'transaction_id',
+            'verified_at', 'created_at', 'delegate_info'
+        )
         
-        # Validate event exists
-        valid_events = set().union(*CATEGORY_EVENT_MAP.values())
-        if event_name not in valid_events:
-            return Response(
-                {"error": f"Invalid event name: {event_name}"},
-                status=status.HTTP_400_BAD_REQUEST
-            )
-        
-        # Get all verified registrations first
-        all_regs = EventRegistration.objects.filter(is_verified=True)
-        
-        # Manual filtering to handle all data formats
         matching_regs = []
+        logger.info(f"Processing {all_regs.count()} registrations")
+
         for reg in all_regs:
-            # Handle all possible data formats
-            events = []
-            if isinstance(reg.events, list):
-                events = [e.lower() for e in reg.events]
-            elif isinstance(reg.events, str):
-                # Handle old string format
-                if reg.events.startswith('['):
+            try:
+                # Handle all possible event formats
+                current_events = []
+                if isinstance(reg.events, list):
+                    current_events = [str(e).lower().strip() for e in reg.events]
+                elif isinstance(reg.events, str):
                     try:
-                        events = json.loads(reg.events.lower())
-                    except json.JSONDecodeError:
-                        events = [reg.events.lower()]
-                else:
-                    events = [e.strip().lower() for e in reg.events.split(',')]
-            
-            # Check if our event is in this registration
-            if event_name in events:
-                matching_regs.append(reg)
+                        # Try to parse as JSON array
+                        parsed = json.loads(reg.events)
+                        if isinstance(parsed, list):
+                            current_events = [str(e).lower().strip() for e in parsed]
+                        else:
+                            current_events = [str(parsed).lower().strip()]
+                    except (json.JSONDecodeError, TypeError):
+                        # Fallback to comma-separated string
+                        current_events = [e.strip().lower() for e in reg.events.split(',')]
+
+                # Check if our event is in this registration
+                if event_name in current_events:
+                    matching_regs.append(reg)
+
+            except Exception as e:
+                logger.error(f"Error processing registration {reg.id}: {str(e)}", exc_info=True)
+                continue
 
         if not matching_regs:
+            logger.warning(f"No registrations found for {event_name}")
             return Response(
                 {"error": f"No registrations found for {event_name}"},
                 status=status.HTTP_404_NOT_FOUND
             )
-        
+
+        logger.info(f"Found {len(matching_regs)} matching registrations")
+
         # Create Excel workbook
         wb = openpyxl.Workbook()
         ws = wb.active
-        ws.title = event_name.replace("_", " ").title()[:31]  # Excel sheet name limit
+        sheet_title = (event_name.replace("_", " ").title()[:31] or "Event Registrations")
+        ws.title = sheet_title
 
         # Headers
         headers = [
@@ -480,72 +489,96 @@ def export_event_by_name(request, event_name):
 
         # Data rows
         for reg in matching_regs:
-            # Get events in consistent format
-            if isinstance(reg.events, list):
-                events_display = ", ".join(reg.events)
-            else:
-                events_display = str(reg.events)
+            try:
+                # Format events for display
+                if isinstance(reg.events, list):
+                    events_display = ", ".join(reg.events)
+                else:
+                    events_display = str(reg.events)
 
-            # Main registrant
-            ws.append([
-                "Main Registrant",
-                reg.user_id, 
-                reg.name, 
-                reg.email, 
-                reg.phone, 
-                reg.college,
-                events_display,
-                reg.amount, 
-                reg.status, 
-                reg.transaction_id,
-                reg.verified_at.strftime("%Y-%m-%d %H:%M") if reg.verified_at else "",
-                reg.created_at.strftime("%Y-%m-%d")
-            ])
-            
-            # Teammates
-            for i, teammate in enumerate(reg.delegate_info or [], 1):
-                # Get delegate details
-                delegate = None
-                if teammate.get('delegate_id'):
-                    delegate = DelegateCardRegistration.objects.filter(
-                        user_id=teammate.get('delegate_id')
-                    ).first()
-                
+                # Main registrant row
                 ws.append([
-                    f"Teammate {i}",
-                    teammate.get('delegate_id', ''),
-                    delegate.name if delegate else teammate.get('name', ''),
-                    teammate.get('email', ''),
-                    teammate.get('phone', ''),
-                    delegate.college_name if delegate else teammate.get('college', ''),
-                    "", "", "", "", "", ""  # Empty fields for alignment
+                    "Main Registrant",
+                    reg.user_id or "",
+                    reg.name or "",
+                    reg.email or "",
+                    reg.phone or "",
+                    reg.college or "",
+                    events_display,
+                    reg.amount or 0,
+                    reg.status or "",
+                    reg.transaction_id or "",
+                    reg.verified_at.strftime("%Y-%m-%d %H:%M") if reg.verified_at else "",
+                    reg.created_at.strftime("%Y-%m-%d") if reg.created_at else ""
                 ])
-            
+
+                # Teammates rows
+                if reg.delegate_info:
+                    if isinstance(reg.delegate_info, str):
+                        try:
+                            teammates = json.loads(reg.delegate_info)
+                        except json.JSONDecodeError:
+                            teammates = []
+                    else:
+                        teammates = reg.delegate_info
+
+                    for i, teammate in enumerate(teammates, 1):
+                        delegate = None
+                        if isinstance(teammate, dict) and teammate.get('delegate_id'):
+                            try:
+                                delegate = DelegateCardRegistration.objects.filter(
+                                    user_id=teammate['delegate_id']
+                                ).first()
+                            except Exception as e:
+                                logger.error(f"Error fetching delegate {teammate.get('delegate_id')}: {str(e)}")
+
+                        ws.append([
+                            f"Teammate {i}",
+                            teammate.get('delegate_id', ''),
+                            delegate.name if delegate else teammate.get('name', ''),
+                            teammate.get('email', ''),
+                            teammate.get('phone', ''),
+                            delegate.college_name if delegate else teammate.get('college', ''),
+                            "", "", "", "", "", ""
+                        ])
+
+            except Exception as e:
+                logger.error(f"Error generating row for registration {reg.id}: {str(e)}", exc_info=True)
+                continue
+
             # Add empty row between registrations
             ws.append([])
 
         # Adjust column widths
         for i, header in enumerate(headers, 1):
-            ws.column_dimensions[get_column_letter(i)].width = max(20, len(header) + 2)
+            col_letter = get_column_letter(i)
+            ws.column_dimensions[col_letter].width = max(20, len(header) + 2)
 
         # Prepare response
         response = HttpResponse(
-            content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+            content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+            status=status.HTTP_200_OK
         )
-        filename = f"{event_name}_registrations.xlsx"
+        filename = f"{event_name}_registrations.xlsx".replace(" ", "_")
         response['Content-Disposition'] = f'attachment; filename={filename}'
-        wb.save(response)
         
-        return response
-        
+        try:
+            wb.save(response)
+            logger.info(f"Successfully exported {len(matching_regs)} registrations")
+            return response
+        except Exception as e:
+            logger.error(f"Failed to save Excel file: {str(e)}", exc_info=True)
+            return Response(
+                {"error": "Failed to generate Excel file", "details": str(e)},
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR
+            )
+
     except Exception as e:
-        import traceback
-        logger.error(f"Export failed for {event_name}: {str(e)}\n{traceback.format_exc()}")
+        logger.error(f"Export failed completely: {str(e)}", exc_info=True)
         return Response(
             {
-                "error": "Export failed",
+                "error": "Export processing failed",
                 "event": event_name,
-                "suggestion": "Check registration data formats",
                 "details": str(e)
             },
             status=status.HTTP_500_INTERNAL_SERVER_ERROR
@@ -588,7 +621,7 @@ def verify_pass(request, pk):
     send_smtp_email(
         to_email=reg.email,
         subject=f"✅ {reg.get_pass_type_display()} Verified – Spandan 2025",
-        message=f"Dear {reg.name},\n\nWe're excited to confirm that your {reg.pass_type} for Spandan2025 has been successfully verified!\n\n🎫 Pass Details:\n• Name: {reg.name}\n• College: {reg.college_name}\n• Pass: {reg.pass_type}\n• Pass ID: {reg.user_id}\n• Amount Paid: ₹{reg.amount}\n• Date of Purchase: {reg.created_at.strftime("%m/%d/%Y")}\n\nYour pass allows you to participate in eligible events under this category. Please carry this confirmation and your college ID for smooth verification at the venue.\n\nFor any support, feel free to reach us at jsa.jipmer@gmail.com.\n\nWarm regards,\nTeam Spandan"
+        message=f"Dear {reg.name},\n\nWe're excited to confirm that your {reg.pass_type} for Spandan2025 - The Comic Chronicles has been successfully verified!\n\n🎫 Pass Details:\n• Name: {reg.name}\n• College: {reg.college_name}\n• Pass: {reg.pass_type}\n• Pass ID: {reg.user_id}\n• Amount Paid: ₹{reg.amount}\n• Date of Purchase: {reg.created_at.strftime("%m/%d/%Y")}\n\nYour pass allows you to participate in eligible events under this category. Please carry this confirmation and your college ID for smooth verification at the venue.\n\nFor any support, feel free to reach us at jsa.jipmer@gmail.com.\n\nWarm regards,\nTeam Spandan"
     )
     return Response({"message": "Pass verified"}, status=status.HTTP_200_OK)
 
