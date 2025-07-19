@@ -4,7 +4,6 @@ export const meta = {
   late: 3000,
   onspot: 3000,
   thumbnail: './assets/cricket.png',
-    description: "Showcase your team's choreographic brilliance with themed group dance performances.",
-    details: ["Team Event", "Theme-based", "6-8 Min Performance"]
-  }
+    description: "Showcase your cricketing skills in this inter-college cricket tournament.",
+details: ["Team Event", "Knockout format", "Standard rules"]}
   

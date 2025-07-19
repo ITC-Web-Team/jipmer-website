@@ -4,7 +4,6 @@ export const meta = {
   late: 150,
   onspot: 150,
   thumbnail: './assets/malarkey.png',
-    description: "Showcase your team's choreographic brilliance with themed group dance performances.",
-    details: ["Team Event", "Theme-based", "6-8 Min Performance"]
-  }
+    description: "Test your wit and creativity in this word-based improvisation event.",
+details: ["Solo Event", "On-the-spot topics", "2-3 min performance"]}
   

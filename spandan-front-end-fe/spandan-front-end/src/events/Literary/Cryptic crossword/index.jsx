@@ -4,7 +4,6 @@ export const meta = {
   late: 150,
   onspot: 150,
   thumbnail: './assets/cryptic.png',
-    description: "Showcase your team's choreographic brilliance with themed group dance performances.",
-    details: ["Team Event", "Theme-based", "6-8 Min Performance"]
-  }
+    description: "Solve challenging cryptic crosswords against the clock.",
+details: ["Solo Event", "Crossword provided", "50-60 min performance"]}
   

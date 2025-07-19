@@ -4,7 +4,6 @@ export const meta = {
   late: 150,
   onspot: 200,
   thumbnail: './assets/culturals.png',
-    description: "Showcase your team's choreographic brilliance with themed group dance performances.",
-    details: ["Team Event", "Theme-based", "6-8 Min Performance"]
-  }
+    description: "Face off against other dancers in an intense dance battle where only the best moves win.",
+details: ["Solo or Team Event", "Knockout rounds", "Freestyle, 2-4 min performance"]}
   

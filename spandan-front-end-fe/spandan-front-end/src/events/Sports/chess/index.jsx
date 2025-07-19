@@ -4,7 +4,6 @@ export const meta = {
   late: 300,
   onspot: 300,
   thumbnail: './assets/chess.png',
-    description: "Showcase your team's choreographic brilliance with themed group dance performances.",
-    details: ["Team Event", "Theme-based", "6-8 Min Performance"]
-  }
+    description: "Test your strategic thinking in this classic chess tournament.",
+details: ["Solo Event", "Swiss/knockout format", "Standard rules"]}
   

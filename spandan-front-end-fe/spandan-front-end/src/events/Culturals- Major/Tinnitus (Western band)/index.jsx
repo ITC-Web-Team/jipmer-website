@@ -4,7 +4,6 @@ export const meta = {
   late: 250,
   onspot: 250,
   thumbnail: './assets/tinnitus.png',
-    description: "Showcase your team's choreographic brilliance with themed group dance performances.",
-    details: ["Team Event", "Theme-based", "6-8 Min Performance"]
-  }
+    description: "Rock the stage with your team's best Western numbers in this electrifying competition.",
+details: ["Team Event", "Western music", "8-10 min performance"]}
   

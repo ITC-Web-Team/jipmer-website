@@ -4,7 +4,6 @@ export const meta = {
   late: 125,
   onspot: 150,
   thumbnail: './assets/mime.png',
-    description: "Showcase your team's choreographic brilliance with themed group dance performances.",
-    details: ["Team Event", "Theme-based", "6-8 Min Performance"]
-  }
+    description: "Convey powerful messages and emotions through silent mime performances.",
+details: ["Team Event", "No dialogues", "6-8 min performance"]}
   

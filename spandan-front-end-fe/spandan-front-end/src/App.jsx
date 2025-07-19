@@ -20,6 +20,7 @@ import PassPurchaseForm from './backend-components/PassPurchaseForm.jsx'
 import HomePage from './backend-components/HomePage.jsx'
 import NotFound from './backend-components/NotFound.jsx'
 import ScrollToTopButton from "./components/ScrollToTop.jsx"
+import Footer from "./components/Footer"
 
 function App() {
 
@@ -87,7 +88,9 @@ function App() {
         <Route path="*" element={<NotFound />} />
       </Routes>
       <ScrollToTopButton />
+      <Footer />
     </BrowserRouter>
+  
     </>
   )
 }

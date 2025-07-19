@@ -4,7 +4,6 @@ export const meta = {
   late:350,
   onspot: 350,
   thumbnail: './assets/futsal.png',
-    description: "Showcase your team's choreographic brilliance with themed group dance performances.",
-    details: ["Team Event", "Theme-based", "6-8 Min Performance"]
-  }
+    description: "Fast-paced futsal matches with smaller teams and quick gameplay.",
+details: ["Team Event", "Knockout format", "Standard rules"]}
   

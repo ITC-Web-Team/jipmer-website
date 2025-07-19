@@ -4,7 +4,6 @@ export const meta = {
   late: 300,
   onspot: 300,
   thumbnail: './assets/carrom.png',
-    description: "Showcase your team's choreographic brilliance with themed group dance performances.",
-    details: ["Team Event", "Theme-based", "6-8 Min Performance"]
-  }
+    description: "Show your precision and skill in this carroms competition.",
+details: ["Solo or Team Event", "Knockout format", "Standard rules"]}
   

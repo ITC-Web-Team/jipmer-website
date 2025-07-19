@@ -4,7 +4,6 @@ export const meta = {
     late: 250,
     onspot: 250,
     thumbnail: './assets/alaap.png',
-    description: "Showcase your team's choreographic brilliance with themed group dance performances.",
-    details: ["Team Event", "Theme-based", "6-8 Min Performance"]
-  }
+    description: "Form a team and perform soulful Eastern music, showcasing your instrumental and vocal skills.",
+details: ["Team Event", "Eastern music", "8-10 min performance"]}
   

@@ -41,7 +41,7 @@ body {
 }
   
 .spandan-events-section {
-    height: 100vh;
+    height: auto;
     padding: 2rem 1rem;
     max-width: 1200px;
     margin: 0 auto;
@@ -76,6 +76,7 @@ body {
     font-size: 1.15rem;
     margin-bottom: 1.5rem;
     color: #cfd8dc;
+    font-family: 'Might Makes Right BB', sans-serif;
 }
   
 .event-filters {
@@ -86,20 +87,23 @@ body {
 }
   
 .event-filters .filter {
-    background: #232a3b;
-    color: #fff;
-    border: none;
-    border-radius: 50px;
+
+    margin: 0;
+    background: white;
+    color: black;
+    border-radius: 0;
+    border: 2px solid black;
     padding: 0.5rem 1.25rem;
-    font-size: 1rem;
+    font-size: 1.2rem;
     cursor: pointer;
-    transition: background 0.2s;
+    font-family: 'might makes right bb', sans-serif;
 }
   
 .event-filters .filter.active,
 .event-filters .filter:hover {
-    background: #1da1f2;
-    color: #fff;
+    transform: scale(1.05);
+    transition: transform 0.2s ease-in-out;
+    background: yellow;
 }
   
 .event-cards-container {
@@ -127,9 +131,17 @@ body {
 }
   
 .event-photo {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #600015;
+    font-size: 3rem;
+    font-family: 'badaboom bb', cursive;
     width: auto;
     height: 220px;
     border: 4px solid rgba(189, 190, 192, 0.80);
+    color: #FBCA03;
+    text-align: center;
 }
 .purple { 
 
@@ -187,7 +199,7 @@ body {
 }
 
 .event-details {
-    list-style: disc inside;
+    list-style:square;
     margin: 0.8rem 0;
     padding-left: 0.1rem;
     color: #fff;
@@ -196,7 +208,7 @@ body {
 }
 .event-details li {
     margin-bottom: 0.3em;
-    font-weight: 500;
+    font-weight: 700;
 }
   
 .registration-fee {
@@ -255,7 +267,11 @@ body {
 .register-button:hover {
   transform: scale(1.05);
 }
-
+.event-details {
+    font-family: 'Gill Sans', sans-serif;
+    color: black;
+    font-style: normal;
+}
 @keyframes glow {
   from {
     box-shadow: 0 0 5px #1da1f2, 0 0 10px #1da1f2;

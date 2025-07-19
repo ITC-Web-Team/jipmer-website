@@ -4,7 +4,6 @@ export const meta = {
     late: 250,
     onspot: 250,
     thumbnail: './assets/chorea.png',
-    description: "Showcase your team's choreographic brilliance with themed group dance performances.",
-    details: ["Team Event", "Theme-based", "6-8 Min Performance"]
-  }
+    description: "Deliver a high-energy team dance in Eastern or Western style, without a specific theme.",
+details: ["Team Event", "Eastern or Western style", "6-8 min performance"]}
   

@@ -4,7 +4,6 @@ export const meta = {
   late: 350,
   onspot: 350,
   thumbnail: './assets/basketball.png',
-    description: "Showcase your team's choreographic brilliance with themed group dance performances.",
-    details: ["Team Event", "Theme-based", "6-8 Min Performance"]
-  }
+    description: "Compete in a high-energy basketball tournament for men’s teams.",
+details: ["Team Event", "Knockout format", "Standard rules"]}
   

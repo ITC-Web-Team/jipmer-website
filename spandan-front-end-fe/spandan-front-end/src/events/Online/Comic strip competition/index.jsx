@@ -4,7 +4,6 @@ export const meta = {
   late: 100,
   onspot: 100,
   thumbnail: './assets/comicstrip.png',
-    description: "Showcase your team's choreographic brilliance with themed group dance performances.",
-    details: ["Team Event", "Theme-based", "6-8 Min Performance"]
-  }
+    description: "Design a comic strip that tells a unique story or delivers a powerful message.",
+details: ["Solo Event", "Original artwork", "4-6 min performance (explanation/presentation)"]}
   

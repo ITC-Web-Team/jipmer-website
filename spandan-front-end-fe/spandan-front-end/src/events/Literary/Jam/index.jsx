@@ -4,7 +4,6 @@ export const meta = {
   late: 150,
   onspot: 150,
   thumbnail: './assets/jam.png',
-    description: "Showcase your team's choreographic brilliance with themed group dance performances.",
-    details: ["Team Event", "Theme-based", "6-8 Min Performance"]
-  }
+    description: "Speak on a given topic for one minute without hesitation, repetition, or deviation.",
+details: ["Solo Event", "Topics given on spot", "1 min performance"]}
   

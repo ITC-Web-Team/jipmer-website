@@ -66,7 +66,9 @@ function Events() {
               <p className="registration-fee"><LuBadgeIndianRupee size={20} /> <b>{fee}</b></p>
             </div>
 
-            <div className="event-photo" style={{ backgroundImage: `url(${thumbnail})` }}></div>
+            <div className="event-photo">
+              {name}
+            </div>
 
             <h2>{name}</h2>
             <p className="subtitle">{description}</p>

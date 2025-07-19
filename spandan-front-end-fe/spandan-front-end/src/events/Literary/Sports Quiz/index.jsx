@@ -4,7 +4,6 @@ export const meta = {
   late: 150,
   onspot: 150,
   thumbnail: './assets/sportsquiz',
-    description: "Showcase your team's choreographic brilliance with themed group dance performances.",
-    details: ["Team Event", "Theme-based", "6-8 Min Performance"]
-  }
+    description: "Compete in a quiz covering sports from around the world.",
+details: ["Team Event", "Multiple rounds", "Written and oral"]}
   

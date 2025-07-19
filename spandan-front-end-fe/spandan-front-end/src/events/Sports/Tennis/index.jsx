@@ -4,7 +4,6 @@ export const meta = {
   late:350,
   onspot: 350,
   thumbnail: './assets/tennis.png',
-    description: "Showcase your team's choreographic brilliance with themed group dance performances.",
-    details: ["Team Event", "Theme-based", "6-8 Min Performance"]
-  }
+    description: "Showcase your tennis skills in singles and doubles matches.",
+details: ["Solo or Team Event", "Knockout format", "Standard rules"]}
   

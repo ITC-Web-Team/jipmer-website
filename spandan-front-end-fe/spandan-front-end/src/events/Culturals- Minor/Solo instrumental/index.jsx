@@ -4,7 +4,6 @@ export const meta = {
   late: 150,
   onspot: 200,
   thumbnail: './assets/soloinstrumental.png',
-    description: "Showcase your team's choreographic brilliance with themed group dance performances.",
-    details: ["Team Event", "Theme-based", "6-8 Min Performance"]
-  }
+    description: "Showcase your mastery over any musical instrument in this solo event.",
+details: ["Solo Event", "Any instrument", "4-5 min performance"]}
   

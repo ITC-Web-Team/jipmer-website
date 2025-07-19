@@ -4,7 +4,6 @@ export const meta = {
   late: 150,
   onspot: 200,
   thumbnail: './assets/culturals.png',
-    description: "Showcase your team's choreographic brilliance with themed group dance performances.",
-    details: ["Team Event", "Theme-based", "6-8 Min Performance"]
-  }
+description: "Test your spontaneity as you dance to random tunes played on the spot.",
+details: ["Solo Event", "Music changes unexpectedly", "2-3 min performance"]}
   

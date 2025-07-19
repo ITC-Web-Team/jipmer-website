@@ -4,7 +4,6 @@ export const meta = {
   late: 150,
   onspot: 200,
   thumbnail: './assets/eup-raag.png',
-    description: "Showcase your team's choreographic brilliance with themed group dance performances.",
-    details: ["Team Event", "Theme-based", "6-8 Min Performance"]
-  }
+    description: "Perform unplugged Western acoustic music, focusing on melody and harmony.",
+details: ["Solo or Team Event", "Acoustic instruments only", "6-8 min performance"]}
   

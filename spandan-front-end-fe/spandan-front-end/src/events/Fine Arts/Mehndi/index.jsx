@@ -4,7 +4,6 @@ export const meta = {
   late: 100,
   onspot: 125,
   thumbnail: './assets/finearts.png',
-    description: "Showcase your team's choreographic brilliance with themed group dance performances.",
-    details: ["Team Event", "Theme-based", "6-8 Min Performance"]
-  }
+    description: "Create intricate mehendi designs on your partner’s hand.",
+details: ["Team Event", "Bring your own mehendi cones", "50-60 min performance"]}
   

@@ -4,7 +4,6 @@ export const meta = {
   late: 250,
   onspot: 250,
   thumbnail: './assets/tjjaisankar.png',
-    description: "Showcase your team's choreographic brilliance with themed group dance performances.",
-    details: ["Team Event", "Theme-based", "6-8 Min Performance"]
-  }
+    description: "Prestigious quiz event in memory of TJ Jaishankar, covering a wide range of topics.",
+details: ["Team Event", "Multiple rounds", "Written and oral"]}
   

@@ -4,7 +4,6 @@ export const meta = {
   late: 150,
   onspot: 150,
   thumbnail: './assets/turncoat.png',
-    description: "Showcase your team's choreographic brilliance with themed group dance performances.",
-    details: ["Team Event", "Theme-based", "6-8 Min Performance"]
-  }
+    description: "Engage in a humorous mock court session, defending or prosecuting quirky cases.",
+details: ["Team Event", "Roles assigned on spot", "8-10 min performance"]}
   

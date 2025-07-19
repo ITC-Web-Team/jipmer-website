@@ -60,6 +60,12 @@
   transition: 200ms ease;
 }
 
+.active{
+  transform: scale(1.05);
+  color: #fbc903;
+  -webkit-text-stroke: black 0.1 rem;
+}
+
 .navlinks {
   text-decoration: none;
   color: inherit;

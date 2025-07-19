@@ -4,7 +4,6 @@ export const meta = {
   late: 150,
   onspot: 150,
   thumbnail: './assets/shipwrecked.png',
-    description: "Showcase your team's choreographic brilliance with themed group dance performances.",
-    details: ["Team Event", "Theme-based", "6-8 Min Performance"]
-  }
+    description: "Convince the audience why your character deserves to survive in this fun, role-play event.",
+details: ["Solo Event", "Character assigned on spot", "2-3 min performance"]}
   

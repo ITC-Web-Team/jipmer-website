@@ -4,7 +4,6 @@ export const meta = {
   late:350,
   onspot: 350,
   thumbnail: './assets/volleyball.png',
-    description: "Showcase your team's choreographic brilliance with themed group dance performances.",
-    details: ["Team Event", "Theme-based", "6-8 Min Performance"]
-  }
+    ddescription: "Men’s volleyball teams compete for the championship title.",
+details: ["Team Event", "Knockout format", "Standard rules"]}
   

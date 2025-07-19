@@ -4,7 +4,6 @@ export const meta = {
   late: 150,
   onspot: 200,
   thumbnail: './assets/solosinging.png',
-    description: "Showcase your team's choreographic brilliance with themed group dance performances.",
-    details: ["Team Event", "Theme-based", "6-8 Min Performance"]
-  }
+    description: "Sing your heart out in either Eastern or Western solo singing categories.",
+details: ["Solo Event", "Eastern or Western style", "3-4 min performance"]}
   

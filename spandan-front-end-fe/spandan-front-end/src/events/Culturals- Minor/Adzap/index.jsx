@@ -4,7 +4,6 @@ export const meta = {
   late: 125,
   onspot: 150,
   thumbnail: './assets/adzap.png',
-    description: "Showcase your team's choreographic brilliance with themed group dance performances.",
-    details: ["Team Event", "Theme-based", "6-8 Min Performance"]
-  }
+    description: "Create and enact witty advertisements for given products or themes.",
+details: ["Team Event", "Product/theme given on spot", "2-3 min performance"]}
   

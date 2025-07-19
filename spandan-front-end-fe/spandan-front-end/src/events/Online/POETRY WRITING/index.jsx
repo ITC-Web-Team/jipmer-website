@@ -4,7 +4,6 @@ export const meta = {
   late: 100,
   onspot: 100,
   thumbnail: './assets/poetry.png',
-    description: "Showcase your team's choreographic brilliance with themed group dance performances.",
-    details: ["Team Event", "Theme-based", "6-8 Min Performance"]
-  }
+    description: "Express your thoughts and emotions through original poetry.",
+details: ["Solo Event", "Theme provided", "2-3 min performance (recitation)"] }
   

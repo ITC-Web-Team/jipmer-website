@@ -3,7 +3,6 @@ export const meta = {
   early: 100,
   late: 100,
   onspot: 100,
-    description: "Showcase your team's choreographic brilliance with themed group dance performances.",
-    details: ["Team Event", "Theme-based", "6-8 Min Performance"]
-  }
+    description: "Produce a short, engaging video reel on a given topic.",
+details: ["Solo or Team Event", "Topic provided", "1-2 min performance (video duration)"]}
   

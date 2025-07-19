@@ -4,7 +4,6 @@ export const meta = {
   late:350,
   onspot: 350,
   thumbnail: './assets/hockey.png',
-    description: "Showcase your team's choreographic brilliance with themed group dance performances.",
-    details: ["Team Event", "Theme-based", "6-8 Min Performance"]
-  }
+    description: "Women’s hockey teams compete for glory in this exciting tournament.",
+details: ["Team Event", "Knockout format", "Standard rules"]}
   

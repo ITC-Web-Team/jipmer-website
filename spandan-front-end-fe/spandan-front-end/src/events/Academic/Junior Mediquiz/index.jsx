@@ -4,8 +4,8 @@ export const meta = {
   late: 750,
   onspot: 900,
   thumbnail: './assets/juniormedi.png',
-    description: "Showcase your team's choreographic brilliance with themed group dance performances.",
-    details: ["Team Event", "Theme-based", "6-8 Min Performance"],
+    description: "A medical quiz for undergraduate students, testing knowledge across all preclinical and paraclinical subjects.",
+details: ["Team Event", "Written prelims and oral finals", "Open to undergraduates"],
     form_link: "https://docs.google.com/forms/d/e/1FAIpQLSdTYnr0UA5OOXz7SpppvgvzhR4fTOUQjNvGve3KvoIRFivbHw/viewform?usp=header"
   }
   

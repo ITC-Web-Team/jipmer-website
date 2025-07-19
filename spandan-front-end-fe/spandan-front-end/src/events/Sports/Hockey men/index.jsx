@@ -4,7 +4,6 @@ export const meta = {
   late:350,
   onspot: 350,
   thumbnail: './assets/hockey.png',
-    description: "Showcase your team's choreographic brilliance with themed group dance performances.",
-    details: ["Team Event", "Theme-based", "6-8 Min Performance"]
-  }
+    description: "Men’s teams compete in fast-paced hockey matches for the trophy.",
+details: ["Team Event", "Knockout format", "Standard rules"]}
   

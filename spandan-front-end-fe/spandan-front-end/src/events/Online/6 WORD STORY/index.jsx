@@ -4,7 +4,6 @@ export const meta = {
   late: 100,
   onspot: 100,
   thumbnail: './assets/6wordstories.png',
-    description: "Showcase your team's choreographic brilliance with themed group dance performances.",
-    details: ["Team Event", "Theme-based", "6-8 Min Performance"]
-  }
+    description: "Craft a compelling story using only six words, showcasing your creativity and brevity.",
+details: ["Solo Event", "Submit online", "1-2 min performance (presentation/reading)"]}
   

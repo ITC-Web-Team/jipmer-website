@@ -4,7 +4,6 @@ export const meta = {
   late: 250,
   onspot: 250,
   thumbnail: './assets/aquatics.png',
-    description: "Showcase your team's choreographic brilliance with themed group dance performances.",
-    details: ["Team Event", "Theme-based", "6-8 Min Performance"]
-  }
+    description: "Compete in various swimming and aquatic events for top honors.",
+details: ["Solo or Team Event", "Multiple categories", "Standard rules"]}
   

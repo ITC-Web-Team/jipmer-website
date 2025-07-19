@@ -1,0 +1,142 @@
+@import url('https://fonts.googleapis.com/css2?family=Bangers&family=Comic+Neue:wght@700&display=swap');
+
+:root {
+  --bg-light: #fffbe6;
+  --bubble-yellow: #fff176;
+  --bubble-blue: #bbdefb;
+  --bubble-pink: #f8bbd0;
+  --bubble-green: #c8e6c9;
+  --black: #222;
+}
+
+.comic-footer {
+  background: var(--bg-light);
+  color: var(--black);
+  padding: 60px 30px;
+  font-family: 'Comic Neue', sans-serif;
+  border-top: 4px dotted var(--black);
+}
+
+.comic-footer__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 30px;
+  margin-bottom: 40px;
+}
+
+.bubble {
+  padding: 20px;
+  background-color: white;
+  border: 4px solid var(--black);
+  border-radius: 20px;
+  box-shadow: 5px 5px 0 var(--black);
+  position: relative;
+  transition: transform 0.2s;
+}
+
+.bubble:hover {
+  transform: translateY(-4px);
+}
+
+.bubble:nth-child(1) {
+  background-color: var(--bubble-yellow);
+}
+
+.bubble:nth-child(2) {
+  background-color: var(--bubble-blue);
+}
+
+.bubble:nth-child(3) {
+  background-color: var(--bubble-green);
+}
+
+.bubble:nth-child(4) {
+  background-color: var(--bubble-pink);
+}
+
+.bubble__title {
+  font-family: 'Bangers', cursive;
+  font-size: 4rem;
+  margin-bottom: 10px;
+  color: var(--black);
+}
+
+.bubble__subtitle {
+  font-size: 3rem;
+  color: #0277bd;
+  font-weight: bold;
+}
+
+.bubble__text {
+  font-size: 0.95rem;
+  line-height: 1.5;
+}
+
+.bubble__text.small {
+  font-size: 0.8rem;
+  color: #555;
+}
+
+.bubble__list {
+  list-style: square;
+  padding-left: 1.2rem;
+  font-size: 0.95rem;
+}
+
+.map-placeholder {
+  width: 100%;
+  height: 120px;
+  background: repeating-linear-gradient(
+    45deg,
+    #fce4ec,
+    #fce4ec 10px,
+    #ffffff 10px,
+    #ffffff 20px
+  );
+  border: 2px dashed var(--black);
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Bangers', cursive;
+  font-size: 1.5rem;
+  margin: 10px 0;
+}
+
+.comic-footer__bottom {
+  text-align: center;
+  border-top: 2px dashed var(--black);
+  padding-top: 30px;
+  font-size: 0.9rem;
+}
+
+.comic-footer__button {
+  margin: 20px auto;
+  display: inline-block;
+  background: #ffeb3b;
+  color: var(--black);
+  border: 4px solid var(--black);
+  font-family: 'Bangers', cursive;
+  font-size: 1rem;
+  padding: 8px 20px;
+  cursor: pointer;
+  border-radius: 8px;
+  box-shadow: 3px 3px 0px var(--black);
+  transform: rotate(-1deg);
+  transition: transform 0.2s ease;
+}
+
+.comic-footer__button:hover {
+  transform: rotate(0deg) scale(1.05);
+}
+
+.comic-footer__hashtags {
+  color: #0288d1;
+  font-weight: bold;
+  margin-top: 10px;
+}
+
+.comic-footer__tagline {
+  font-style: italic;
+  color: #c2185b;
+}
