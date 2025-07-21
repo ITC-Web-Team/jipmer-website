@@ -122,23 +122,29 @@ class DelegateCardRegisterView(APIView):
 
 @api_view(['PATCH'])
 @permission_classes([IsAuthenticated, IsAdminUser])
-def verify_registration(request, pk):
+def verify_event_registration(request, pk):
     try:
-        reg = DelegateCardRegistration.objects.get(pk=pk)
-    except DelegateCardRegistration.DoesNotExist:
+        reg = EventRegistration.objects.get(pk=pk)
+    except EventRegistration.DoesNotExist:
         return Response({'error': 'Not found'}, status=status.HTTP_404_NOT_FOUND)
-    
+
     reg.is_verified = True
     reg.status = 'approved'
     reg.verified_at = timezone.now()
     reg.save()
 
+    # --- Start of fix ---
+    # 1. Create the formatted string for the event list first.
+    event_list_str = "\n".join([f"- {event}" for event in reg.events])
+    # --- End of fix ---
+
     send_smtp_email(
         to_email=reg.email,
-        subject="✅ Delegate Card Verified – Spandan 2025",
-        message=f"Dear {reg.name},\n\nWe are delighted to confirm your registration as a delegate for Spandan 2025 - The Comic Chronicles, scheduled to be held from August 25th to 30th at JIPMER, Puducherry. Your participation is vital to making this event a success, and we are excited to welcome you to a vibrant lineup of activities and discussions!\n\nRegistration Details:\n\n- Delegate Name: {reg.name}\n- College: {reg.college_name}\n- Tier: {reg.tier.upper()}\n- Delegate ID: {reg.user_id}\n- Date of Registration: {reg.created_at.strftime('%m/%d/%Y')}\n\nYou can use your Delegate ID {reg.user_id} to complete event registration through our official website.\n\nPlease carry a copy of this email and your college ID at the venue for smooth entry. Event guidelines and schedules will be shared soon.\n\nFor help, contact us at jsa.jipmer@gmail.com.\n\nWe look forward to hosting you at Spandan 2025!\n\nWarm regards,\nSuriya\nPresident, JIPMER Student Association"
+        subject="✅ Event Registration Verified – Spandan 2025",
+        # 2. Now, insert the pre-formatted string into the main message.
+        message=f"Dear {reg.name},\n\nWe are thrilled to confirm your registration for the following events at Spandan 2025 - The Comic Chronicles:\n{event_list_str}\n\nRegistration Details:\nName: {reg.name}\nCollege: {reg.college}\nEmail: {reg.email}\nTotal Paid: ₹{reg.amount}\nEvent ID: {reg.user_id}\n- Date: {reg.created_at.strftime('%m/%d/%Y')}\n\nPlease carry a copy of this confirmation email and your delegate ID (if applicable) during the event.\n\nIf you have questions or need help, feel free to write to us at jsa.jipmer@gmail.com.\n\nAll the best and see you soon at Spandan 2025!\n\nWarm regards,\nTeam Spandan"
     )
-    return Response({"message": "Delegate card verified"}, status=status.HTTP_200_OK)
+    return Response({"message": "Event registration verified"}, status=status.HTTP_200_OK)
 
 @api_view(['PATCH'])
 @permission_classes([IsAuthenticated, IsAdminUser])
