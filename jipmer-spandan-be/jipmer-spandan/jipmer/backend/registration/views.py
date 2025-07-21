@@ -417,12 +417,36 @@ def verify_event_registration(request, pk):
     reg.status = 'approved'
     reg.verified_at = timezone.now()
     reg.save()
+  # First, prepare the formatted string for the list of events
+    events_list_str = "\n".join([f"- {event}" for event in reg.events])
 
+    # Then, send the email with a much cleaner f-string
     send_smtp_email(
         to_email=reg.email,
         subject="✅ Event Registration Verified – Spandan 2025",
-        message=f"Dear {reg.name},\n\nWe are thrilled to confirm your registration for the following events at Spandan 2025 - The Comic Chronicles:\n{''.join(f'- {e}\n' for e in reg.events)}\n\nRegistration Details:\nName: {reg.name}\nCollege: {reg.college}\nEmail: {reg.email}\nTotal Paid: ₹{reg.amount}\nEvent ID: {reg.user_id}\n- Date: {reg.created_at.strftime('%m/%d/%Y')}\n\nPlease carry a copy of this confirmation email and your delegate ID (if applicable) during the event.\n\nIf you have questions or need help, feel free to write to us at jsa.jipmer@gmail.com.\n\nAll the best and see you soon at Spandan 2025!\n\nWarm regards,\nTeam Spandan"
+        message=f"""Dear {reg.name},
+
+We are thrilled to confirm your registration for the following events at Spandan 2025 - The Comic Chronicles:
+{events_list_str}
+
+Registration Details:
+- Name: {reg.name}
+- College: {reg.college}
+- Email: {reg.email}
+- Total Paid: ₹{reg.amount}
+- Event ID: {reg.user_id}
+- Date: {reg.created_at.strftime('%m/%d/%Y')}
+
+Please carry a copy of this confirmation email and your delegate ID (if applicable) during the event.
+
+If you have questions or need help, feel free to write to us at jsa.jipmer@gmail.com.
+
+All the best and see you soon at Spandan 2025!
+
+Warm regards,
+Team Spandan"""
     )
+
     return Response({"message": "Event registration verified"}, status=status.HTTP_200_OK)
 
 @api_view(['PATCH'])
