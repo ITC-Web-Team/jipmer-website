@@ -79,7 +79,7 @@ const EVENT_CATEGORIES = [
       { id: 'shipwrecked', name: "Shipwrecked", price: 150, exempt: false },
       { id: 'turncoat', name: "Turncoat", price: 150, exempt: false },
       { id: 'scrabble', name: "Scrabble", price: 150, exempt: false },
-      { id: 'formal_debate', name: "Formal Debate", price: 150, exempt: false },
+      { id: 'formal_debate', name: "Formal Debate", price: 250, exempt: false },
       { id: 'cryptic_crossword', name: "Cryptic Crossword", price: 150, exempt: false },
       { id: 'ppt_karaoke', name: "PPT Karaoke", price: 150, exempt: false },
       { id: 'potpourri', name: "Potpourri", price: 150, exempt: false },
@@ -87,7 +87,6 @@ const EVENT_CATEGORIES = [
       { id: 'fandom_quiz', name: "Fandom Quiz", price: 150, exempt: false },
       { id: 'sports_quiz', name: "Sports Quiz", price: 150, exempt: false },
       { id: 'rewind_quiz', name: "Rewind Quiz", price: 150, exempt: false },
-      { id: 'formal_quiz', name: "Formal Quiz", price: 250, exempt: false },
       { id: 'tj_jaishankar_memorial_quiz', name: "TJ Jaishankar Quiz", price: 250, exempt: false },
       { id: 'jam', name: "Just A Minute", price: 250, exempt: false }
     ]
