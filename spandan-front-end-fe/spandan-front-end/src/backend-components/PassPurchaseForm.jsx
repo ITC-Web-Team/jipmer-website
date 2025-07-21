@@ -5,11 +5,11 @@ import ErrorBoundary from './ErrorBoundary';
 import './form-style.css'
 
 const PASS_OPTIONS = [
-  { value: 'sports', label: 'Sports Pass - ₹250', price: 250 },
-  { value: 'cult', label: 'Cultural Pass - ₹250', price: 250 },
-  { value: 'lit_quiz', label: 'Literary Quiz Pass - ₹500', price: 500 },
-  { value: 'lit_lit', label: 'Literary Pass - ₹500', price: 500 },
-  { value: 'lit_premium', label: 'Premium Literary Pass - ₹750', price: 750 }
+  { value: 'sports', label: 'Sports Pass', price: 250 },
+  { value: 'cult', label: 'Cultural Pass', price: 250 },
+  { value: 'lit_quiz', label: 'Nexus Forum Standard - Quiz Edition Literary', price: 500 },
+  { value: 'lit_lit', label: 'Nexus Forum Standard - Debating Edition', price: 500 },
+  { value: 'lit_premium', label: 'Nexus Forum Premium', price: 750 }
 ];
 
 const PassPurchaseForm = () => {

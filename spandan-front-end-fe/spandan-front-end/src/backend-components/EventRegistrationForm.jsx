@@ -57,19 +57,58 @@ const EVENT_CATEGORIES = [
       { id: 'volleyball_men', name: "Volleyball (Men)", price: 300, exempt: false },
       { id: 'volleyball_women', name: "Volleyball (Women)", price: 300, exempt: false },
       { id: 'hockey_men', name: "Hockey (Men)", price: 300, exempt: false },
-      { id: 'hockey_women', name: "Hockey (Women)", price: 300, exempt: false },
-      { id: 'futsal', name: "Futsal", price: 300, exempt: false },
+      { id: 'futsal_men', name: "Futsal (Men)", price: 300, exempt: false },
+      { id: 'futsal_women', name: "Futsal (Women)", price: 300, exempt: false },
       { id: 'chess_bullet', name: "Chess Bullet", price: 200, exempt: false },
       { id: 'chess_rapid', name: "Chess Rapid", price: 200, exempt: false },
       { id: 'chess_blitz', name: "Chess Blitz", price: 200, exempt: false },
+      { id: 'chess_team', name: "Chess Team", price: 200, exempt: false },
       { id: 'carroms', name: "Carroms", price: 150, exempt: false },
       { id: 'throwball_men', name: "Throwball (Men)", price: 300, exempt: false },
       { id: 'throwball_women', name: "Throwball (Women)", price: 300, exempt: false },
-      { id: 'tennis', name: "Tennis", price: 300, exempt: false },
-      { id: 'aquatics', name: "Aquatics", price: 200, exempt: false },
-      { id: 'badminton', name: "Badminton", price: 300, exempt: false },
-      { id: 'table_tennis', name: "Table Tennis", price: 300, exempt: false },
-      { id: 'athletics', name: "Athletics", price: 200, exempt: false }
+      { id: 'tennis', name: "Tennis", price: 300, exempt: false, subcategories: [
+        { id: 'tennis_men_singles', name: "Men's Singles", price: 300 },
+        { id: 'tennis_women_singles', name: "Women's Singles", price: 300 },
+        { id: 'tennis_men_doubles', name: "Men's Doubles", price: 300 },
+        { id: 'tennis_women_doubles', name: "Women's Doubles", price: 300 },
+        { id: 'tennis_mixed_doubles', name: "Mixed Doubles", price: 300 }
+      ] },
+      { id: 'aquatics', name: "Aquatics", price: 200, exempt: false, subcategories: [
+        { id: 'aquatics_men_50m_freestyle', name: "Men's 50m Freestyle", price: 200 },
+        { id: 'aquatics_men_50m_backstroke', name: "Men's 50m Backstroke", price: 200 },
+        { id: 'aquatics_men_50m_breaststroke', name: "Men's 50m Breaststroke", price: 200 },
+        { id: 'aquatics_men_50m_butterfly', name: "Men's 50m Butterfly", price: 200 },
+        { id: 'aquatics_men_4x50m_freestyle_relay', name: "Men's 4x50m Freestyle Relay", price: 200 },
+        { id: 'aquatics_women_50m_freestyle', name: "Women's 50m Freestyle", price: 200 },
+        { id: 'aquatics_women_50m_backstroke', name: "Women's 50m Backstroke", price: 200 },
+        { id: 'aquatics_women_50m_breaststroke', name: "Women's 50m Breaststroke", price: 200 },
+        { id: 'aquatics_women_50m_butterfly', name: "Women's 50m Butterfly", price: 200 },
+        { id: 'aquatics_mixed_4x50m_freestyle_relay', name: "Mixed 4x50m Freestyle Relay", price: 200 }
+      ] },
+      { id: 'badminton', name: "Badminton", price: 300, exempt: false, subcategories: [
+        { id: 'badminton_men_singles', name: "Men's Singles", price: 300 },
+        { id: 'badminton_women_singles', name: "Women's Singles", price: 300 },
+        { id: 'badminton_men_doubles', name: "Men's Doubles", price: 300 },
+        { id: 'badminton_women_doubles', name: "Women's Doubles", price: 300 },
+        { id: 'badminton_mixed_doubles', name: "Mixed's Doubles", price: 300 },
+      ] },
+      { id: 'table_tennis', name: "Table Tennis", price: 300, exempt: false, subcategories: [
+        { id: 'table_tennis_men_singles', name: "Men's Singles", price: 300 },
+        { id: 'table_tennis_women_singles', name: "Women's Singles", price: 300 },
+        { id: 'table_tennis_men_doubles', name: "Men's Doubles", price: 300 },
+        { id: 'table_tennis_women_doubles', name: "Women's Doubles", price: 300 }
+      ] },
+      { id: 'athletics', name: "Athletics", price: 200, exempt: false, subcategories: [
+        { id: 'athletics_100m', name: "100m Sprint", price: 200 },
+        { id: 'athletics_200m', name: "200m Sprint", price: 200 },
+        { id: 'athletics_400m', name: "400m Sprint", price: 200 },
+        { id: 'athletics_800m', name: "800m Run", price: 200 },
+        { id: 'athletics_1500m', name: "1500m Run", price: 200 },
+        { id: 'athletics_4x100m', name: "4x100m Relay", price: 200 },
+        { id: 'athletics_shot_put', name: "Shot Put", price: 200 },
+        { id: 'athletics_discus_throw', name: "Discus Throw", price: 200 },
+        { id: 'athletics_long_jump', name: "Long Jump", price: 200 }
+      ] }
     ]
   },
   {
@@ -110,7 +149,7 @@ const EventRegistrationForm = () => {
   const [needsDelegate, setNeedsDelegate] = useState(false);
   const [delegateVerified, setDelegateVerified] = useState(false);
   const [checkingDelegate, setCheckingDelegate] = useState(false);
-
+  const [expandedEvents, setExpandedEvents] = useState({});
   // Check delegate card status
   const checkDelegateStatus = async (email) => {
     if (!email) return false;
@@ -187,15 +226,98 @@ const EventRegistrationForm = () => {
   // Calculate total amount
   useEffect(() => {
     let total = 0;
-    EVENT_CATEGORIES.forEach(category => {
-      category.events.forEach(event => {
-        if (formData.events.includes(event.id)) {
-          total += event.price;
-        }
-      });
+    
+    formData.events.forEach(eventId => {
+      // Find the event in either main events or subcategories
+      const event = EVENT_CATEGORIES
+        .flatMap(cat => cat.events)
+        .flatMap(e => e.subcategories ? [e, ...e.subcategories] : [e])
+        .find(e => e.id === eventId);
+      
+      if (event) {
+        total += event.price || 0;
+      }
     });
-    setTotalAmount(total);
-  }, [formData.events]);
+
+    const teammateCount = Math.max(1, 1 + formData.delegate_info.filter(t => 
+      t.delegate_id.trim() !== '' && t.email.trim() !== ''
+    ).length);
+    
+    setTotalAmount(total * teammateCount);
+  }, [formData.events, formData.delegate_info]);
+
+  const toggleSubcategories = (eventID) => {
+    setExpandedEvents(prev => ({
+      ...prev, [eventID] : !prev[eventID]
+    }));
+  };
+
+  const handleSubcategoryChange = (subcategoryId) => {
+    setFormData(prev => ({
+      ...prev,
+      events: prev.events.includes(subcategoryId)
+        ? prev.events.filter(id => id !== subcategoryId)
+        : [...prev.events, subcategoryId]
+    }));
+  };
+
+  const renderEventCheckbox = (event) => {
+    const hasSubcategories = event.subcategories?.length > 0;
+    const isExpanded = expandedEvents[event.id];
+
+    if (hasSubcategories) {
+      return (
+        <div key={event.id} className='event-container'>
+          <div className='event-header'>
+            <span className='event-name'>
+              {event.name}
+            </span>
+            <button
+              type='button'
+              onClick={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                toggleSubcategories(event.id);
+              }}
+              className='subcategory-toggle'
+            >
+              {isExpanded ? '▼' : '▶'}
+            </button>
+          </div>
+
+          {isExpanded && (
+            <div className='subcategories'>
+              {event.subcategories.map(sub => (
+                <label key={sub.id} className='subcategory-label'>
+                  <input
+                    type='checkbox'
+                    checked={formData.events.includes(sub.id)}
+                    onChange={() => handleSubcategoryChange(sub.id)}
+                  />
+                  {sub.name} (₹{sub.price})
+                </label>
+              ))}
+            </div>
+          )}
+        </div>
+      );
+    }
+
+    // Regular event without subcategories
+    return (
+      <div key={event.id} className='event-container'>
+        <label className={`event-label ${event.exempt ? 'exempt' : ''}`}>
+          <input
+            type='checkbox'
+            checked={formData.events.includes(event.id)}
+            onChange={() => handleCheckboxChange(event.id)}
+          />
+          {event.name} {event.price > 0 && `(₹${event.price})`}
+          {event.exempt && <span className="exempt-badge">Exempt</span>}
+        </label>
+      </div>
+    );
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -323,20 +445,7 @@ const EventRegistrationForm = () => {
               <div key={category.name} className="event-category">
                 <h4>{category.name}</h4>
                 <div className="event-checkboxes">
-                  {category.events.map(event => (
-                    <label 
-                      key={event.id} 
-                      className={`event-label ${event.exempt ? 'exempt' : ''}`}
-                    >
-                      <input
-                        type="checkbox"
-                        checked={formData.events.includes(event.id)}
-                        onChange={() => handleCheckboxChange(event.id)}
-                      />
-                      {event.name} {event.price > 0 && `(₹${event.price})`}
-                      {event.exempt && <span className="exempt-badge">Exempt</span>}
-                    </label>
-                  ))}
+                  {category.events.map(event => renderEventCheckbox(event))}
                 </div>
               </div>
             ))}
