@@ -348,20 +348,24 @@ class EventRegisterView(APIView):
                     )
 
             # Check event requirements
+           # Check event requirements
             needs_delegate = any(
-                event not in EXEMPT_EVENTS
-                and not (
-                    (event in SPORTS_EVENTS or 
-                    event in BADMINTON_EVENTS or
-                    event in TENNIS_EVENTS or
-                    event in TABLE_TENNIS_EVENTS or
-                    event in ATHLETICS_EVENTS or
-                    event in AQUATICS_EVENTS) and 
-                    PassPurchase.objects.filter(email=email, pass_type='sports', is_verified=True).exists()
-                ) or
-                (event in CULT_EVENTS and PassPurchase.objects.filter(email=email, pass_type='cult', is_verified=True).exists()) or
-                (event in LIT_EVENTS and PassPurchase.objects.filter(email=email, pass_type__in=['lit_lit', 'lit_premium'], is_verified=True).exists()) or
-                (event in QUIZ_EVENTS and PassPurchase.objects.filter(email=email, pass_type__in=['lit_quiz', 'lit_premium'], is_verified=True).exists())
+                # Condition: The event is NOT exempt AND the user does NOT have a valid pass for it.
+                event not in EXEMPT_EVENTS and not (
+                    # Check for any valid pass type that covers the event
+                    (
+                        (event in SPORTS_EVENTS or
+                         event in BADMINTON_EVENTS or
+                         event in TENNIS_EVENTS or
+                         event in TABLE_TENNIS_EVENTS or
+                         event in ATHLETICS_EVENTS or
+                         event in AQUATICS_EVENTS) and
+                        PassPurchase.objects.filter(email=email, pass_type='sports', is_verified=True).exists()
+                    ) or
+                    (event in CULT_EVENTS and PassPurchase.objects.filter(email=email, pass_type='cult', is_verified=True).exists()) or
+                    (event in LIT_EVENTS and PassPurchase.objects.filter(email=email, pass_type__in=['lit_lit', 'lit_premium'], is_verified=True).exists()) or
+                    (event in QUIZ_EVENTS and PassPurchase.objects.filter(email=email, pass_type__in=['lit_quiz', 'lit_premium'], is_verified=True).exists())
+                )
                 for event in selected_events
             )
 
