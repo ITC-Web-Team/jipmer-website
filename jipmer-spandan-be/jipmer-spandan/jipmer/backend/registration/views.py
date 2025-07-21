@@ -136,7 +136,7 @@ def verify_registration(request, pk):
     send_smtp_email(
         to_email=reg.email,
         subject="✅ Delegate Card Verified – Spandan 2025",
-        message=f"Dear {reg.name},\nWe are delighted to confirm your registration as a delegate for Spandan 2025 - The Comic Chronicles, scheduled to be held from August 25th to 30th at JIPMER, Puducherry. Your participation is a vital to making this event a success, and we are excited to welcome you to a vibrant lineup of activities and discussions!\n\n🪪 Registration Details:\n\n• Delegate Name: {reg.name}\n• College: {reg.college_name}\n• Tier: {reg.tier.upper()}\n• Delegate ID: {reg.user_id}\n• Date of Registration: {reg.created_at.strftime("%m/%d/%Y")}\n\nYou can use your **Delegate ID** `{reg.user_id}` to complete event registration through our official website.\n\nPlease carry a copy of this email and your college ID at the venue for smooth entry. Event guidelines and schedules will be shared soon.\n\nFor help, contact us at jsa.jipmer@gmail.com.\nWe look forward forward to hosting you at Spandan 2025!\n\nWarm regards,\nSuriya\nPresident, JIPMER Student Association"
+        message=f"Dear {reg.name},\nWe are delighted to confirm your registration as a delegate for Spandan 2025 - The Comic Chronicles, scheduled to be held from August 25th to 30th at JIPMER, Puducherry. Your participation is a vital to making this event a success, and we are excited to welcome you to a vibrant lineup of activities and discussions!\n\n🪪 Registration Details:\n\n- Delegate Name: {reg.name}\n- College: {reg.college_name}\n- Tier: {reg.tier.upper()}\n- Delegate ID: {reg.user_id}\n- Date of Registration: {reg.created_at.strftime("%m/%d/%Y")}\n\nYou can use your **Delegate ID** `{reg.user_id}` to complete event registration through our official website.\n\nPlease carry a copy of this email and your college ID at the venue for smooth entry. Event guidelines and schedules will be shared soon.\n\nFor help, contact us at jsa.jipmer@gmail.com.\nWe look forward forward to hosting you at Spandan 2025!\n\nWarm regards,\nSuriya\nPresident, JIPMER Student Association"
     )
     return Response({"message": "Delegate card verified"}, status=status.HTTP_200_OK)
 
@@ -417,7 +417,7 @@ def verify_event_registration(request, pk):
     send_smtp_email(
         to_email=reg.email,
         subject="✅ Event Registration Verified – Spandan 2025",
-        message=f"Dear {reg.name},\n\nWe are thrilled to confirm your registration for the following events at Spandan 2025 - The Comic Chronicles:\n{''.join(f"• {e}\n" for e in reg.events)}\n\n🧾 Registration Details:\nName: {reg.name}\nCollege: {reg.college}\nEmail: {reg.email}\nTotal Paid: ₹{reg.amount}\nEvent ID: {reg.user_id}\n• Date: {reg.created_at.strftime("%m/%d/%Y")}\n\nPlease carry a copy of this confirmation email and your delegate ID(if applicable) during the event.\n\nIf you have questions or need help, feel free to write to us at jsa.jipmer@gmail.com.\nAll the best and see you soon at Spandan 2025!\n\nWarm regards,\nTeam Spandan"
+        message=f"Dear {reg.name},\n\nWe are thrilled to confirm your registration for the following events at Spandan 2025 - The Comic Chronicles:\n{''.join(f"- {e}\n" for e in reg.events)}\n\n🧾 Registration Details:\nName: {reg.name}\nCollege: {reg.college}\nEmail: {reg.email}\nTotal Paid: ₹{reg.amount}\nEvent ID: {reg.user_id}\n- Date: {reg.created_at.strftime("%m/%d/%Y")}\n\nPlease carry a copy of this confirmation email and your delegate ID(if applicable) during the event.\n\nIf you have questions or need help, feel free to write to us at jsa.jipmer@gmail.com.\nAll the best and see you soon at Spandan 2025!\n\nWarm regards,\nTeam Spandan"
     )
     return Response({"message": "Event registration verified"}, status=status.HTTP_200_OK)
 
@@ -438,7 +438,7 @@ def reject_event_registration_soft(request, pk):
         to_email=reg.email,
         subject="❌ Event Registration Rejected – Spandan 2025",
         message=f"Hi {reg.name},\n\nYour event registration has been rejected.\n\nEvents:\n" +
-                "\n".join(f"• {e}" for e in reg.events) +
+                "\n".join(f"- {e}" for e in reg.events) +
                 "\n\nPlease review your payment and try again if needed.\n\nFor any query, contact us at jsa.jipmer@gmail.com.\n\nRegards,\nTeam Spandan"
     )
     return Response({'message': 'Event registration rejected'}, status=status.HTTP_200_OK)
@@ -794,7 +794,7 @@ def verify_pass(request, pk):
     send_smtp_email(
         to_email=reg.email,
         subject=f"✅ {reg.get_pass_type_display()} Verified – Spandan 2025",
-        message=f"Dear {reg.name},\n\nWe're excited to confirm that your {reg.pass_type} for Spandan2025 - The Comic Chronicles has been successfully verified!\n\n🎫 Pass Details:\n• Name: {reg.name}\n• College: {reg.college_name}\n• Pass: {reg.pass_type}\n• Pass ID: {reg.user_id}\n• Amount Paid: ₹{reg.amount}\n• Date of Purchase: {reg.created_at.strftime("%m/%d/%Y")}\n\nYour pass allows you to participate in eligible events under this category. Please carry this confirmation and your college ID for smooth verification at the venue.\n\nFor any support, feel free to reach us at jsa.jipmer@gmail.com.\n\nWarm regards,\nTeam Spandan"
+        message=f"Dear {reg.name},\n\nWe're excited to confirm that your {reg.pass_type} for Spandan2025 - The Comic Chronicles has been successfully verified!\n\n🎫 Pass Details:\n- Name: {reg.name}\n- College: {reg.college_name}\n- Pass: {reg.pass_type}\n- Pass ID: {reg.user_id}\n- Amount Paid: ₹{reg.amount}\n- Date of Purchase: {reg.created_at.strftime("%m/%d/%Y")}\n\nYour pass allows you to participate in eligible events under this category. Please carry this confirmation and your college ID for smooth verification at the venue.\n\nFor any support, feel free to reach us at jsa.jipmer@gmail.com.\n\nWarm regards,\nTeam Spandan"
     )
     return Response({"message": "Pass verified"}, status=status.HTTP_200_OK)
 
