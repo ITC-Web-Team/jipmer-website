@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 
 from pathlib import Path
 import os
+import dj_database_url
 from dotenv import load_dotenv
 load_dotenv()
 
@@ -23,12 +24,12 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-#ja(l7s3@4)o@hb#h&9oksbarjo05jkp65h9u&d3#$pm$xh!el'
+SECRET_KEY = os.getenv('django-insecure-#ja(l7s3@4)o@hb#h&9oksbarjo05jkp65h9u&d3#$pm$xh!el')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.getenv("DEBUG", "False") == "True"
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["backend.jipmerspandan.in", "localhost"]
 
 
 # Application definition
@@ -44,6 +45,7 @@ INSTALLED_APPS = [
     'registration',
     'rest_framework_simplejwt',
     'corsheaders',
+    'dj_database_url',
 ]
 
 REST_FRAMEWORK = {
