@@ -56,7 +56,7 @@ AQUATICS_EVENTS = {
     'aquatics_mixed_4x50m_freestyle_relay'
 }
 SPORTS_EVENTS = {
-    'cricket', 'football', 'basketball_men', 'basketball_women',
+    'cricket', 'football', 'basketball_men', 'basketball_women', 
     'volleyball_men', 'volleyball_women', 'hockey_men',
     'futsal_men', 'futsal_women', 'chess_bullet', 'chess_rapid',
     'chess_blitz', 'chess_team', 'carroms', 'throwball_men', 'throwball_women',
@@ -173,7 +173,7 @@ def export_verified_delegate_cards(request):
         ws.append([
             r.user_id, r.name, r.email, r.phone, r.college_name, r.tier,
             r.amount, r.status, r.transaction_id,
-            r.verified_at.strftime("%Y-%m-%d %H:%M") if r.verified_at else "",
+            r.verified_at.strftime("%Y-%m-%d %H:%M") if r.verified_at else "", 
             r.created_at.strftime("%Y-%m-%d")
         ])
     for i in range(1, len(headers) + 1):
@@ -351,12 +351,12 @@ class EventRegisterView(APIView):
             needs_delegate = any(
                 event not in EXEMPT_EVENTS
                 and not (
-                    (event in SPORTS_EVENTS or
+                    (event in SPORTS_EVENTS or 
                     event in BADMINTON_EVENTS or
                     event in TENNIS_EVENTS or
                     event in TABLE_TENNIS_EVENTS or
                     event in ATHLETICS_EVENTS or
-                    event in AQUATICS_EVENTS) and
+                    event in AQUATICS_EVENTS) and 
                     PassPurchase.objects.filter(email=email, pass_type='sports', is_verified=True).exists()
                 ) or
                 (event in CULT_EVENTS and PassPurchase.objects.filter(email=email, pass_type='cult', is_verified=True).exists()) or
@@ -375,7 +375,7 @@ class EventRegisterView(APIView):
 
             amount = sum(EVENT_PRICE_MAP.get(event, 0) for event in selected_events)
             teammate_count = len([t for t in (data.get('delegate_info') or [])
-                                    if t.get('delegate_id') and t.get('email')]) or 1
+                                  if t.get('delegate_id') and t.get('email')]) or 1
             data['amount'] = amount*teammate_count
             
             serializer = EventRegistrationSerializer(data=data)
@@ -401,7 +401,6 @@ class EventRegisterView(APIView):
                 status=status.HTTP_500_INTERNAL_SERVER_ERROR
             )
 
-# THIS IS THE CORRECTED FUNCTION
 @api_view(['PATCH'])
 @permission_classes([IsAuthenticated, IsAdminUser])
 def verify_event_registration(request, pk):
@@ -415,14 +414,10 @@ def verify_event_registration(request, pk):
     reg.verified_at = timezone.now()
     reg.save()
 
-    # Create the formatted string for the event list first.
-    event_list_str = "\n".join([f"- {event}" for event in reg.events])
-
     send_smtp_email(
         to_email=reg.email,
         subject="✅ Event Registration Verified – Spandan 2025",
-        # Insert the pre-formatted string into the main message.
-        message=f"Dear {reg.name},\n\nWe are thrilled to confirm your registration for the following events at Spandan 2025 - The Comic Chronicles:\n{event_list_str}\n\nRegistration Details:\nName: {reg.name}\nCollege: {reg.college}\nEmail: {reg.email}\nTotal Paid: ₹{reg.amount}\nEvent ID: {reg.user_id}\n- Date: {reg.created_at.strftime('%m/%d/%Y')}\n\nPlease carry a copy of this confirmation email and your delegate ID (if applicable) during the event.\n\nIf you have questions or need help, feel free to write to us at jsa.jipmer@gmail.com.\n\nAll the best and see you soon at Spandan 2025!\n\nWarm regards,\nTeam Spandan"
+        message=f"Dear {reg.name},\n\nWe are thrilled to confirm your registration for the following events at Spandan 2025 - The Comic Chronicles:\n{''.join(f'- {e}\n' for e in reg.events)}\n\nRegistration Details:\nName: {reg.name}\nCollege: {reg.college}\nEmail: {reg.email}\nTotal Paid: ₹{reg.amount}\nEvent ID: {reg.user_id}\n- Date: {reg.created_at.strftime('%m/%d/%Y')}\n\nPlease carry a copy of this confirmation email and your delegate ID (if applicable) during the event.\n\nIf you have questions or need help, feel free to write to us at jsa.jipmer@gmail.com.\n\nAll the best and see you soon at Spandan 2025!\n\nWarm regards,\nTeam Spandan"
     )
     return Response({"message": "Event registration verified"}, status=status.HTTP_200_OK)
 
@@ -457,8 +452,8 @@ def export_verified_event_registrations(request):
         
         # Headers
         headers = [
-            "Type", "User ID", "Name", "Email", "Phone", "College",
-            "Events", "Amount", "Status", "Transaction ID",
+            "Type", "User ID", "Name", "Email", "Phone", "College", 
+            "Events", "Amount", "Status", "Transaction ID", 
             "Verified At", "Date"
         ]
         ws.append(headers)
@@ -470,7 +465,7 @@ def export_verified_event_registrations(request):
                 r.user_id, r.name, r.email, r.phone, r.college,
                 ", ".join(r.events),
                 r.amount, r.status, r.transaction_id,
-                r.verified_at.strftime("%Y-%m-%d %H:%M") if r.verified_at else "",
+                r.verified_at.strftime("%Y-%m-%d %H:%M") if r.verified_at else "", 
                 r.created_at.strftime("%Y-%m-%d")
             ])
             
@@ -627,7 +622,7 @@ def export_event_by_name(request, event_name):
 
         # Get all verified registrations
         all_regs = EventRegistration.objects.filter(is_verified=True).only(
-            'user_id', 'name', 'email', 'phone', 'college',
+            'user_id', 'name', 'email', 'phone', 'college', 
             'events', 'amount', 'status', 'transaction_id',
             'verified_at', 'created_at', 'delegate_info'
         )
@@ -678,8 +673,8 @@ def export_event_by_name(request, event_name):
 
         # Enhanced headers
         headers = [
-            "Type", "User ID", "Name", "Email", "Phone", "College",
-            "All Registered Events", "Amount", "Status",
+            "Type", "User ID", "Name", "Email", "Phone", "College", 
+            "All Registered Events", "Amount", "Status", 
             "Transaction ID", "Verified At", "Registration Date"
         ]
         ws.append(headers)
@@ -834,7 +829,7 @@ def export_verified_passes(request):
         ws.append([
             r.user_id, r.name, r.email, r.phone, r.college_name,
             r.get_pass_type_display(), r.amount, r.status, r.transaction_id,
-            r.verified_at.strftime("%Y-%m-%d %H:%M") if r.verified_at else "",
+            r.verified_at.strftime("%Y-%m-%d %H:%M") if r.verified_at else "", 
             r.created_at.strftime("%Y-%m-%d")
         ])
     for i in range(1, len(headers) + 1):
