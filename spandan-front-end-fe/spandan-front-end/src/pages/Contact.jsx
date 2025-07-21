@@ -132,7 +132,7 @@ function Contact() {
           <div className="spandan-dates-grid">
             <div className="spandan-date-card">
               <span className="spandan-date-label">Registration Opens</span>
-              <span className="spandan-date-value">July 18, 2025</span>
+              <span className="spandan-date-value">July 21, 2025</span>
             </div>
             <div className="spandan-date-card">
               <span className="spandan-date-label">Early Bird Deadline</span>

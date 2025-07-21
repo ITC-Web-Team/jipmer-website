@@ -45,13 +45,7 @@ body{
 }
 
 #titlef {
-    font-family: "Street Drips";
-    position: absolute;
-    margin-bottom: 5rem;
-    margin-top: 0;
-    font-size: 10rem;
-    font-weight: 400;
-    color: #149CFF;
+    display: none;
 }
 
 .centered-div {

@@ -24,12 +24,44 @@ EXEMPT_EVENTS = {
     'case_presentation', 'poster_presentation',
     'research_paper', 'mediquiz', 'clinico_pathological_conference',
 }
-
-SPORTS_EVENTS = {'football', 'cricket', 'badminton', 'volleyball', 'table_tennis', 'throwball'}
 CULT_EVENTS = {'solo_dance', 'duet_dance', 'mono_act', 'street_play', 'meme_making', 'face_painting'}
 CULT_MAJOR_EVENTS = {'chorea', 'alaap', 'tinnitus', 'dernier_cri'}
-LIT_EVENTS = {'debate', 'poetry', 'essay', 'elocution'}
-QUIZ_EVENTS = {'medical_quiz', 'general_quiz'}
+LIT_EVENTS = {'debate', 'poetry', 'essay', 'elocution', 'formal_debate'}
+QUIZ_EVENTS = {'medical_quiz', 'general_quiz', 'india_quiz', 'fandom_quiz', 'sports_quiz', 'rewind_quiz', 'tj_jaishankar_memorial_quiz', 'jam'}
+BADMINTON_EVENTS = {
+    'badminton_men_singles', 'badminton_women_singles',
+    'badminton_men_doubles', 'badminton_women_doubles',
+    'badminton_mixed_doubles'
+}
+TENNIS_EVENTS = {
+    'tennis_men_singles', 'tennis_women_singles',
+    'tennis_men_doubles', 'tennis_women_doubles',
+    'tennis_mixed_doubles'
+}
+TABLE_TENNIS_EVENTS = {
+    'table_tennis_men_singles', 'table_tennis_women_singles',
+    'table_tennis_men_doubles', 'table_tennis_women_doubles'
+}
+ATHLETICS_EVENTS = {
+    'athletics_100m', 'athletics_200m', 'athletics_400m',
+    'athletics_800m', 'athletics_1500m', 'athletics_4x100m',
+    'athletics_shot_put', 'athletics_discus_throw', 'athletics_long_jump'
+}
+AQUATICS_EVENTS = {
+    'aquatics_men_50m_freestyle', 'aquatics_men_50m_backstroke',
+    'aquatics_men_50m_breaststroke', 'aquatics_men_50m_butterfly',
+    'aquatics_men_4x50m_freestyle_relay',
+    'aquatics_women_50m_freestyle', 'aquatics_women_50m_backstroke',
+    'aquatics_women_50m_breaststroke', 'aquatics_women_50m_butterfly',
+    'aquatics_mixed_4x50m_freestyle_relay'
+}
+SPORTS_EVENTS = {
+    'cricket', 'football', 'basketball_men', 'basketball_women', 
+    'volleyball_men', 'volleyball_women', 'hockey_men',
+    'futsal_men', 'futsal_women', 'chess_bullet', 'chess_rapid',
+    'chess_blitz', 'chess_team', 'carroms', 'throwball_men', 'throwball_women',
+    'badminton', 'tennis', 'table_tennis', 'athletics', 'aquatics'
+}
 
 CATEGORY_EVENT_MAP = {
     'fine_arts': {
@@ -46,16 +78,24 @@ CATEGORY_EVENT_MAP = {
     },
     'sports': {
         'cricket', 'football', 'basketball_men', 'basketball_women', 'volleyball_men',
-        'volleyball_women', 'hockey_men', 'hockey_women', 'futsal', 'chess_bullet',
-        'chess_rapid', 'chess_blitz', 'carroms', 'throwball_men', 'throwball_women',
-        'tennis', 'aquatics', 'badminton', 'table_tennis', 'athletics'
+        'volleyball_women', 'hockey_men', 'futsal_men', 'futsal_women', 'chess_bullet',
+        'chess_rapid', 'chess_blitz', 'chess_team', 'carroms', 'throwball_men', 'throwball_women',
+        'tennis_men_singles', 'tennis_women_singles', 'tennis_men_doubles','tennis_women_doubles','tennis_mixed_doubles', 'aquatics_men_50m_freestyle', 'aquatics_men_50m_backstroke',
+        'aquatics_men_50m_breaststroke', 'aquatics_men_50m_butterfly',
+        'aquatics_men_4x50m_freestyle_relay',
+        'aquatics_women_50m_freestyle', 'aquatics_women_50m_backstroke',
+        'aquatics_women_50m_breaststroke', 'aquatics_women_50m_butterfly',
+        'aquatics_mixed_4x50m_freestyle_relay', 'badminton_men_singles', 'badminton_women_singles', 'badminton_men_doubles','badminton_women_doubles','badminton_mixed_doubles', 'table_tennis_men_singles', 'table_tennis_women_singles',
+        'table_tennis_men_doubles', 'table_tennis_women_doubles', 'athletics_100m', 'athletics_200m', 'athletics_400m',
+        'athletics_800m', 'athletics_1500m', 'athletics_4x100m',
+        'athletics_shot_put', 'athletics_discus_throw', 'athletics_long_jump',
     },
     'literary': {
         'malarkey', 'shipwrecked', 'turncoat', 'scrabble', 'formal_debate',
         'cryptic_crossword', 'ppt_karaoke', 'potpourri'
     },
     'quiz': {
-        'india_quiz', 'fandom_quiz', 'sports_quiz', 'rewind_quiz', 'formal_quiz',
+        'india_quiz', 'fandom_quiz', 'sports_quiz', 'rewind_quiz',
         'tj_jaishankar_memorial_quiz', 'jam'
     }
 }
@@ -143,6 +183,106 @@ def export_verified_delegate_cards(request):
     wb.save(response)
     return response
 
+EVENT_PRICE_MAP = {
+    # Fine Arts
+    'face_painting': 100,
+    'pot_painting': 100,
+    'mehendi': 100,
+    'sketching': 100,
+    'painting': 100,
+
+    # Dance
+    'solo_dance': 150,
+    'duet_dance': 150,
+    'chorea_theme': 250,
+    'chorea_nontheme': 250,
+    'show_down': 150,
+
+    # Music
+    'tinnitus': 250,
+    'alaap': 250,
+    'euphony': 150,
+    'raag_rangmanch': 150,
+    'solo_singing': 150,
+    'solo_instrumental': 150,
+
+    # Drama
+    'play': 125,
+    'skit': 125,
+    'mime': 125,
+    'adzap': 125,
+    'variety': 125,
+    'dernier_cri': 250,
+
+    # Sports
+    'cricket': 300,
+    'football': 300,
+    'basketball_men': 300,
+    'basketball_women': 300,
+    'volleyball_men': 300,
+    'volleyball_women': 300,
+    'hockey_men': 300,
+    'futsal_men': 300,
+    'futsal_women': 300,
+    'chess_bullet': 200,
+    'chess_rapid': 200,
+    'chess_blitz': 200,
+    'chess_team' : 200,
+    'carroms': 150,
+    'throwball_men': 300,
+    'throwball_women': 300,
+    # Badminton (all subcategories same price)
+    'badminton_men_singles': 300,
+    'badminton_women_singles': 300,
+    'badminton_men_doubles': 300,
+    'badminton_women_doubles': 300,
+    'badminton_mixed_doubles': 300,
+    
+    # Tennis
+    'tennis_men_singles': 300,
+    'tennis_women_singles': 300,
+    'tennis_men_doubles': 300,
+    'tennis_women_doubles': 300,
+    'tennis_mixed_doubles': 300,
+    
+    # Table Tennis
+    'table_tennis_men_singles': 300,
+    'table_tennis_women_singles': 300,
+    'table_tennis_men_doubles': 300,
+    'table_tennis_women_doubles': 300,
+    
+    # Athletics
+    'athletics_100m': 200, 'athletics_200m': 200, 'athletics_400m': 200,
+    'athletics_800m': 200, 'athletics_1500m': 200, 'athletics_4x100m': 200,
+    'athletics_shot_put': 200, 'athletics_discus_throw': 200, 'athletics_long_jump': 200,
+    # ... all athletics subcategories 200 ...
+    
+    # Aquatics
+    'aquatics_men_50m_freestyle': 200, 'aquatics_men_50m_backstroke': 200,
+    'aquatics_men_50m_breaststroke': 200,
+    'aquatics_men_50m_butterfly': 200,
+    'aquatics_men_4x50m_freestyle_relay': 200,
+    'aquatics_women_50m_freestyle': 200, 'aquatics_women_50m_backstroke': 200,
+    'aquatics_women_50m_breaststroke': 200, 'aquatics_women_50m_butterfly': 200,
+    'aquatics_mixed_4x50m_freestyle_relay': 200,
+
+    # Literary
+    'malarkey': 150,
+    'shipwrecked': 150,
+    'turncoat': 150,
+    'scrabble': 150,
+    'formal_debate': 250,
+    'cryptic_crossword': 150,
+    'ppt_karaoke': 150,
+    'potpourri': 150,
+    'india_quiz': 150,
+    'fandom_quiz': 150,
+    'sports_quiz': 150,
+    'rewind_quiz': 150,
+    'tj_jaishankar_memorial_quiz': 250,
+    'jam': 250,
+}
+
 # Event Registration Views
 class EventRegisterView(APIView):
     permission_classes = [permissions.AllowAny]
@@ -197,16 +337,31 @@ class EventRegisterView(APIView):
                     {"events": "At least one event must be selected"},
                     status=status.HTTP_400_BAD_REQUEST
                 )
+            
+            valid_events = (set().union(*CATEGORY_EVENT_MAP.values()) | BADMINTON_EVENTS | TENNIS_EVENTS | TABLE_TENNIS_EVENTS | ATHLETICS_EVENTS | AQUATICS_EVENTS)
+
+            for event in selected_events:
+                if event not in valid_events:
+                    return Response(
+                        {"error": f"Invalid event: {event}"},
+                        status=status.HTTP_400_BAD_REQUEST
+                    )
 
             # Check event requirements
             needs_delegate = any(
                 event not in EXEMPT_EVENTS
                 and not (
-                    (event in SPORTS_EVENTS and PassPurchase.objects.filter(email=email, pass_type='sports', is_verified=True).exists()) or
-                    (event in CULT_EVENTS and PassPurchase.objects.filter(email=email, pass_type='cult', is_verified=True).exists()) or
-                    (event in LIT_EVENTS and PassPurchase.objects.filter(email=email, pass_type__in=['lit_lit', 'lit_premium'], is_verified=True).exists()) or
-                    (event in QUIZ_EVENTS and PassPurchase.objects.filter(email=email, pass_type__in=['lit_quiz', 'lit_premium'], is_verified=True).exists())
-                )
+                    (event in SPORTS_EVENTS or 
+                    event in BADMINTON_EVENTS or
+                    event in TENNIS_EVENTS or
+                    event in TABLE_TENNIS_EVENTS or
+                    event in ATHLETICS_EVENTS or
+                    event in AQUATICS_EVENTS) and 
+                    PassPurchase.objects.filter(email=email, pass_type='sports', is_verified=True).exists()
+                ) or
+                (event in CULT_EVENTS and PassPurchase.objects.filter(email=email, pass_type='cult', is_verified=True).exists()) or
+                (event in LIT_EVENTS and PassPurchase.objects.filter(email=email, pass_type__in=['lit_lit', 'lit_premium'], is_verified=True).exists()) or
+                (event in QUIZ_EVENTS and PassPurchase.objects.filter(email=email, pass_type__in=['lit_quiz', 'lit_premium'], is_verified=True).exists())
                 for event in selected_events
             )
 
@@ -216,79 +371,12 @@ class EventRegisterView(APIView):
                     status=status.HTTP_403_FORBIDDEN
                 )
 
-            EVENT_PRICE_MAP = {
-                # Fine Arts
-                'face_painting': 100,
-                'pot_painting': 100,
-                'mehendi': 100,
-                'sketching': 100,
-                'painting': 100,
 
-                # Dance
-                'solo_dance': 150,
-                'duet_dance': 150,
-                'chorea_theme': 250,
-                'chorea_nontheme': 250,
-                'show_down': 150,
-
-                # Music
-                'tinnitus': 250,
-                'alaap': 250,
-                'euphony': 150,
-                'raag_rangmanch': 150,
-                'solo_singing': 150,
-                'solo_instrumental': 150,
-
-                # Drama
-                'play': 125,
-                'skit': 125,
-                'mime': 125,
-                'adzap': 125,
-                'variety': 125,
-                'dernier_cri': 250,
-
-                # Sports
-                'cricket': 300,
-                'football': 300,
-                'basketball_men': 300,
-                'basketball_women': 300,
-                'volleyball_men': 300,
-                'volleyball_women': 300,
-                'hockey_men': 300,
-                'hockey_women': 300,
-                'futsal': 300,
-                'chess_bullet': 200,
-                'chess_rapid': 200,
-                'chess_blitz': 200,
-                'carroms': 150,
-                'throwball_men': 300,
-                'throwball_women': 300,
-                'tennis': 300,
-                'aquatics': 200,
-                'badminton': 300,
-                'table_tennis': 300,
-                'athletics': 200,
-
-                # Literary
-                'malarkey': 150,
-                'shipwrecked': 150,
-                'turncoat': 150,
-                'scrabble': 150,
-                'formal_debate': 150,
-                'cryptic_crossword': 150,
-                'ppt_karaoke': 150,
-                'potpourri': 150,
-                'india_quiz': 150,
-                'fandom_quiz': 150,
-                'sports_quiz': 150,
-                'rewind_quiz': 150,
-                'formal_quiz': 250,
-                'tj_jaishankar_memorial_quiz': 250,
-                'jam': 250,
-            }
 
             amount = sum(EVENT_PRICE_MAP.get(event, 0) for event in selected_events)
-            data['amount'] = amount
+            teammate_count = len([t for t in (data.get('delegate_info') or [])
+                                  if t.get('delegate_id') and t.get('email')]) or 1
+            data['amount'] = amount*teammate_count
             
             serializer = EventRegistrationSerializer(data=data)
             if serializer.is_valid():
@@ -428,7 +516,113 @@ def export_event_by_name(request, event_name):
         event_name = event_name.lower().strip()
         logger.info(f"Starting export for event: {event_name}")
 
-        # Get all verified registrations in one query
+        # Enhanced event hierarchy mapping including all sub-events
+        EVENT_HIERARCHY = {
+            # Sports sub-events
+            'tennis': {
+                'tennis_men_singles', 'tennis_women_singles',
+                'tennis_men_doubles', 'tennis_women_doubles',
+                'tennis_mixed_doubles'
+            },
+            'aquatics': {
+                'aquatics_men_50m_freestyle', 'aquatics_men_50m_backstroke',
+                'aquatics_men_50m_breaststroke', 'aquatics_men_50m_butterfly',
+                'aquatics_men_4x50m_freestyle_relay',
+                'aquatics_women_50m_freestyle', 'aquatics_women_50m_backstroke',
+                'aquatics_women_50m_breaststroke', 'aquatics_women_50m_butterfly',
+                'aquatics_mixed_4x50m_freestyle_relay'
+            },
+            'badminton': {
+                'badminton_men_singles', 'badminton_women_singles',
+                'badminton_men_doubles', 'badminton_women_doubles',
+                'badminton_mixed_doubles'
+            },
+            'table_tennis': {
+                'table_tennis_men_singles', 'table_tennis_women_singles',
+                'table_tennis_men_doubles', 'table_tennis_women_doubles'
+            },
+            'athletics': {
+                'athletics_100m', 'athletics_200m', 'athletics_400m',
+                'athletics_800m', 'athletics_1500m', 'athletics_4x100m',
+                'athletics_shot_put', 'athletics_discus_throw', 'athletics_long_jump'
+            },
+            'futsal': {
+                'futsal_men', 'futsal_women'
+            },
+            'basketball': {
+                'basketball_men', 'basketball_women'
+            },
+            'volleyball': {
+                'volleyball_men', 'volleyball_women'
+            },
+            'hockey': {
+                'hockey_men', 'hockey_women'
+            },
+            'throwball': {
+                'throwball_men', 'throwball_women'
+            },
+            'chess': {
+                'chess_bullet', 'chess_rapid', 'chess_blitz', 'chess_team'
+            },
+            
+            # Dance sub-events
+            'chorea': {
+                'chorea_theme', 'chorea_nontheme'
+            },
+            
+            # Fine Arts (individual events)
+            'face_painting': {'face_painting'},
+            'pot_painting': {'pot_painting'},
+            'mehendi': {'mehendi'},
+            'sketching': {'sketching'},
+            'painting': {'painting'},
+            
+            # Dance (individual events)
+            'solo_dance': {'solo_dance'},
+            'duet_dance': {'duet_dance'},
+            'show_down': {'show_down'},
+            
+            # Music
+            'tinnitus': {'tinnitus'},
+            'alaap': {'alaap'},
+            'euphony': {'euphony'},
+            'raag_rangmanch': {'raag_rangmanch'},
+            'solo_singing': {'solo_singing'},
+            'solo_instrumental': {'solo_instrumental'},
+            
+            # Drama
+            'play': {'play'},
+            'skit': {'skit'},
+            'mime': {'mime'},
+            'adzap': {'adzap'},
+            'variety': {'variety'},
+            'dernier_cri': {'dernier_cri'},
+            
+            # Literary
+            'malarkey': {'malarkey'},
+            'shipwrecked': {'shipwrecked'},
+            'turncoat': {'turncoat'},
+            'scrabble': {'scrabble'},
+            'formal_debate': {'formal_debate'},
+            'cryptic_crossword': {'cryptic_crossword'},
+            'ppt_karaoke': {'ppt_karaoke'},
+            'potpourri': {'potpourri'},
+            
+            # Quiz
+            'india_quiz': {'india_quiz'},
+            'fandom_quiz': {'fandom_quiz'},
+            'sports_quiz': {'sports_quiz'},
+            'rewind_quiz': {'rewind_quiz'},
+            'tj_jaishankar_memorial_quiz': {'tj_jaishankar_memorial_quiz'},
+            'jam': {'jam'},
+            
+            # Other sports (individual)
+            'cricket': {'cricket'},
+            'football': {'football'},
+            'carroms': {'carroms'}
+        }
+
+        # Get all verified registrations
         all_regs = EventRegistration.objects.filter(is_verified=True).only(
             'user_id', 'name', 'email', 'phone', 'college', 
             'events', 'amount', 'status', 'transaction_id',
@@ -436,29 +630,29 @@ def export_event_by_name(request, event_name):
         )
         
         matching_regs = []
-        logger.info(f"Processing {all_regs.count()} registrations")
-
+        
         for reg in all_regs:
             try:
-                # Handle all possible event formats
+                # Normalize events data
                 current_events = []
                 if isinstance(reg.events, list):
                     current_events = [str(e).lower().strip() for e in reg.events]
                 elif isinstance(reg.events, str):
                     try:
-                        # Try to parse as JSON array
                         parsed = json.loads(reg.events)
-                        if isinstance(parsed, list):
-                            current_events = [str(e).lower().strip() for e in parsed]
-                        else:
-                            current_events = [str(parsed).lower().strip()]
+                        current_events = [str(e).lower().strip() for e in parsed] if isinstance(parsed, list) else [str(parsed).lower().strip()]
                     except (json.JSONDecodeError, TypeError):
-                        # Fallback to comma-separated string
                         current_events = [e.strip().lower() for e in reg.events.split(',')]
 
-                # Check if our event is in this registration
+                # Check for direct match or hierarchical relationship
                 if event_name in current_events:
                     matching_regs.append(reg)
+                else:
+                    # Check if it's a subcategory of a main event
+                    for main_event, sub_events in EVENT_HIERARCHY.items():
+                        if event_name in sub_events and main_event in current_events:
+                            matching_regs.append(reg)
+                            break
 
             except Exception as e:
                 logger.error(f"Error processing registration {reg.id}: {str(e)}", exc_info=True)
@@ -471,19 +665,19 @@ def export_event_by_name(request, event_name):
                 status=status.HTTP_404_NOT_FOUND
             )
 
-        logger.info(f"Found {len(matching_regs)} matching registrations")
-
         # Create Excel workbook
         wb = openpyxl.Workbook()
         ws = wb.active
-        sheet_title = (event_name.replace("_", " ").title()[:31] or "Event Registrations")
+        
+        # Format sheet title (Excel has 31-char limit for sheet names)
+        sheet_title = (event_name.replace("_", " ").title()[:31])
         ws.title = sheet_title
 
-        # Headers
+        # Enhanced headers
         headers = [
             "Type", "User ID", "Name", "Email", "Phone", "College", 
-            "All Events", "Amount", "Status", "Transaction ID", 
-            "Verified At", "Registration Date"
+            "All Registered Events", "Amount", "Status", 
+            "Transaction ID", "Verified At", "Registration Date"
         ]
         ws.append(headers)
 
@@ -491,10 +685,7 @@ def export_event_by_name(request, event_name):
         for reg in matching_regs:
             try:
                 # Format events for display
-                if isinstance(reg.events, list):
-                    events_display = ", ".join(reg.events)
-                else:
-                    events_display = str(reg.events)
+                events_display = ", ".join(reg.events) if isinstance(reg.events, list) else str(reg.events)
 
                 # Main registrant row
                 ws.append([
@@ -514,14 +705,8 @@ def export_event_by_name(request, event_name):
 
                 # Teammates rows
                 if reg.delegate_info:
-                    if isinstance(reg.delegate_info, str):
-                        try:
-                            teammates = json.loads(reg.delegate_info)
-                        except json.JSONDecodeError:
-                            teammates = []
-                    else:
-                        teammates = reg.delegate_info
-
+                    teammates = json.loads(reg.delegate_info) if isinstance(reg.delegate_info, str) else reg.delegate_info
+                    
                     for i, teammate in enumerate(teammates, 1):
                         delegate = None
                         if isinstance(teammate, dict) and teammate.get('delegate_id'):
@@ -542,12 +727,12 @@ def export_event_by_name(request, event_name):
                             "", "", "", "", "", ""
                         ])
 
+                # Add empty row between registrations
+                ws.append([])
+
             except Exception as e:
                 logger.error(f"Error generating row for registration {reg.id}: {str(e)}", exc_info=True)
                 continue
-
-            # Add empty row between registrations
-            ws.append([])
 
         # Adjust column widths
         for i, header in enumerate(headers, 1):
@@ -562,25 +747,13 @@ def export_event_by_name(request, event_name):
         filename = f"{event_name}_registrations.xlsx".replace(" ", "_")
         response['Content-Disposition'] = f'attachment; filename={filename}'
         
-        try:
-            wb.save(response)
-            logger.info(f"Successfully exported {len(matching_regs)} registrations")
-            return response
-        except Exception as e:
-            logger.error(f"Failed to save Excel file: {str(e)}", exc_info=True)
-            return Response(
-                {"error": "Failed to generate Excel file", "details": str(e)},
-                status=status.HTTP_500_INTERNAL_SERVER_ERROR
-            )
+        wb.save(response)
+        return response
 
     except Exception as e:
         logger.error(f"Export failed completely: {str(e)}", exc_info=True)
         return Response(
-            {
-                "error": "Export processing failed",
-                "event": event_name,
-                "details": str(e)
-            },
+            {"error": "Export processing failed", "details": str(e)},
             status=status.HTTP_500_INTERNAL_SERVER_ERROR
         )
 

@@ -64,12 +64,7 @@ body {
     align-items: center;
 }
 .spandan-banner h1 h1 {
-    
-    position: absolute;
-    font-family: 'Street Drips', sans-serif;
-    color: #0095ff;
-    font-size: 6rem;
-
+   display: none;
 }
   
 .spandan-banner p {
