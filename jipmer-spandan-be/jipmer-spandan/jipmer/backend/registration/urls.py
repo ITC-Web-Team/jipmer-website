@@ -22,5 +22,4 @@ urlpatterns = [
     path('pass-purchase/verify/<int:pk>/', verify_pass, name='verify-pass'),
     path('pass-purchase/reject/<int:pk>/', reject_pass_soft, name='reject-pass'),
     path('pass-purchase/export/', export_verified_passes, name='export-pass'),
-    path('event-register/export/event/<str:event_name>/', export_event_by_name),
-]
+    path('event-register/export/event/<str:event_name>/', export_event_by_name, name='export-event-by-name'),]
